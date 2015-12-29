@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var Discord = require("discord.js");
+var fs = require('fs');
 
 module.exports = function (app, passport) {
 
@@ -64,10 +65,13 @@ module.exports = function (app, passport) {
         });
     });
     app.get('/dashboard/bots', function (req, res, next) {
+        res.render('dashboard/bots.hbs', {
+            title: "Bot Management Panel",
+        });
+    });
 
-
+    app.get('/dashboard/bots/start', function (req, res, next) {
         var mybot = new Discord.Client();
-
 
         var woorden = {};
         woorden["ping"] = "pong";
@@ -75,8 +79,8 @@ module.exports = function (app, passport) {
         woorden["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
         woorden["420 moe"] = "http://420.moe";
 
-        woorden["radioKappaRandom"] = "";
-        woorden["radioKappa"]  = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom"
+
+        woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom"
         woorden["radioKappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
         woorden["radioKappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
         woorden["radioKappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
@@ -90,20 +94,28 @@ module.exports = function (app, passport) {
         woorden["radioKappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
 
 
-
-
         mybot.on("message", function (message) {
             if (message.content in woorden)
-            {
-                if(message.content === "radioKappaRandom")
-                {
-                    var random = getRandomIntInclusive(1,11);
-                    mybot.reply(message,woorden["radioKappa "+random.toString()]);
-                }
-                else
                 mybot.reply(message, woorden[message.content]);
-            }
 
+        });
+        mybot.on("message", function (message) {
+            if (message.content === "radioKappaRandom") {
+                var random = getRandomIntInclusive(1, 11);
+                mybot.reply(message, woorden["radioKappa " + random.toString()]);
+            }
+        });
+
+        var stream = fs.createReadStream("./files/winter2016.jpg");
+        stream.on('end', function() {
+            console.log('End of data reached.');
+        });
+
+        mybot.on("message", function (message) {
+            if (message.content === "winter2016") {
+                var channel = message.channel;
+                mybot.sendFile(channel,stream,"");
+            }
         });
 
         mybot.login("jeroencornelis5@gmail.com", "dankmemer69");
@@ -112,6 +124,7 @@ module.exports = function (app, passport) {
             title: "Bot Management Panel",
         });
     });
+
 
     app.get('/logout', function (req, res) {
         req.logout();
