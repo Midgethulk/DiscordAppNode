@@ -1,7 +1,7 @@
 var User = require('../models/user');
 var Discord = require("discord.js");
 
-module.exports = function(app, passport) {
+module.exports = function (app, passport) {
 
     /* GET home page. */
     app.get('/', function (req, res, next) {
@@ -13,13 +13,13 @@ module.exports = function(app, passport) {
         // render the page and pass in any flash data if it exists
         res.render('login.hbs', {
             message: req.flash('loginMessage')
-            });
+        });
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/login', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/login', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
     }));
 
     app.get('/signup', function (req, res) {
@@ -31,58 +31,89 @@ module.exports = function(app, passport) {
     });
 
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
+        successRedirect: '/profile', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
         //failureFlash : true // allow flash messages
     }));
 
-    app.get('/profile', isLoggedIn,needsGroups(['pleb','admin']), function(req, res) {
+    app.get('/profile', isLoggedIn, needsGroups(['pleb', 'admin']), function (req, res) {
         res.render('profile.hbs', {
-            user : req.user // get the user out of session and pass to template
+            user: req.user // get the user out of session and pass to template
         });
     });
 
 
-    app.get('/dashboard', function(req,res, next){
-        res.render('dashboard/dashboard.hbs',{
-            title:"Dashboard"
+    app.get('/dashboard', function (req, res, next) {
+        res.render('dashboard/dashboard.hbs', {
+            title: "Dashboard"
         });
     });
 
-    app.get('/dashboard/users', function(req,res, next){
+    app.get('/dashboard/users', function (req, res, next) {
         var userData = [];
-        User.find({}, function(err, data) {
-            if (err){
+        User.find({}, function (err, data) {
+            if (err) {
                 console.log(err);
             } else {
                 userData = data;
-                res.render('dashboard/users.hbs',{
-                    title:"User Management Panel",
+                res.render('dashboard/users.hbs', {
+                    title: "User Management Panel",
                     users: userData
                 });
             }
         });
     });
-    app.get('/dashboard/bots', function(req,res, next){
+    app.get('/dashboard/bots', function (req, res, next) {
+
+
         var mybot = new Discord.Client();
 
-        mybot.on("message", function(message){
-            if(message.content === "ping")
-                mybot.reply(message, "pong");
-        });
-        mybot.on("message", function(message){
-            if(message.content === "lenny")
-                mybot.reply(message, "( ͡° ͜ʖ ͡°)");
+
+        var woorden = {};
+        woorden["ping"] = "pong";
+        woorden["lenny"] = "( ͡° ͜ʖ ͡°)";
+        woorden["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
+        woorden["420 moe"] = "http://420.moe";
+
+        woorden["radioKappaRandom"] = "";
+        woorden["radioKappa"]  = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom"
+        woorden["radioKappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
+        woorden["radioKappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
+        woorden["radioKappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
+        woorden["radioKappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
+        woorden["radioKappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
+        woorden["radioKappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
+        woorden["radioKappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
+        woorden["radioKappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
+        woorden["radioKappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
+        woorden["radioKappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
+        woorden["radioKappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
+
+
+
+
+        mybot.on("message", function (message) {
+            if (message.content in woorden)
+            {
+                if(message.content === "radioKappaRandom")
+                {
+                    var random = getRandomIntInclusive(1,11);
+                    mybot.reply(message,woorden["radioKappa "+random.toString()]);
+                }
+                else
+                mybot.reply(message, woorden[message.content]);
+            }
+
         });
 
         mybot.login("jeroencornelis5@gmail.com", "dankmemer69");
 
-            res.render('dashboard/bots.hbs',{
-                title:"Bot Management Panel",
-            });
+        res.render('dashboard/bots.hbs', {
+            title: "Bot Management Panel",
+        });
     });
 
-    app.get('/logout', function(req, res) {
+    app.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/');
     });
@@ -98,8 +129,8 @@ module.exports = function(app, passport) {
         res.redirect('/');
     }
 
-    function needsGroup(group)  {
-        return function(req, res, next) {
+    function needsGroup(group) {
+        return function (req, res, next) {
             if (req.user && req.user.local.group === group)
                 next();
             else
@@ -107,19 +138,21 @@ module.exports = function(app, passport) {
         };
     };
 
-    function needsGroups(groups)  {
-        return function(req, res, next) {
+    function needsGroups(groups) {
+        return function (req, res, next) {
             var authorized = false;
-            if(req.user)
-            {
-                for(var i = 0; i < groups.length; i++)
+            if (req.user) {
+                for (var i = 0; i < groups.length; i++)
                     if (req.user.local.group === groups[i])
-                        authorized=true;
+                        authorized = true;
             }
-            if(authorized)
+            if (authorized)
                 next();
             else
                 res.send(401, 'Unauthorized');
         };
     };
+    function getRandomIntInclusive(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 };
