@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Discord = require("discord.js");
 var fs = require('fs');
+var path = require('path');
 
 var botChan;
 var started = false;
@@ -88,14 +89,16 @@ module.exports = function (app, passport) {
         botChan.on("message", function (message) {
             var channel = message.channel;
             if (message.content === "winter2016") {
-                var stream = fs.createReadStream("./files/winter2016.jpg");
+                var pathToFile = path.join('files',"winter2016.jpg");
+                var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
                 });
 
             }
             if (message.content === "Kappa") {
-                var stream = fs.createReadStream("./files/Kappa.png");
+                var pathToFile = path.join('files',"Kappa.png");
+                var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
                 });
