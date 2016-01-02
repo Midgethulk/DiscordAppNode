@@ -55,6 +55,16 @@
                         <a href="/dashboard/bots/restart" class="btn btn-primary" role="button">Restart</a>
                         <a href="/dashboard/bots/edit" class="btn btn-primary" role="button">Edit</a>
                     </p>
+                    {{#if message}}
+                        <div class="alert alert-info">
+                            <p>{{message}}</p>
+                        </div>
+                    {{/if}}
+                    {{#if error}}
+                        <div class="alert alert-danger">
+                            <p>{{error}}</p>
+                        </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

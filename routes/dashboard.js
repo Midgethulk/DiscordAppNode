@@ -46,10 +46,19 @@ module.exports = function (app, passport) {
                 onlineStatus = true;
                 console.log("login successful\ntoken:" + token);
             });
+            res.render('dashboard/bots.hbs', {
+                title: "Bot Management Panel",
+                message: "Started Bot-Chan!"
+            });
         }
-        res.render('dashboard/bots.hbs', {
-            title: "Bot Management Panel",
-        });
+        else{
+            res.render('dashboard/bots.hbs', {
+                title: "Bot Management Panel",
+                message: "Bot-Chan already started!"
+            });
+        }
+
+
     });
 
     function configureBot() {
@@ -105,7 +114,7 @@ module.exports = function (app, passport) {
         // 'win64' on Windows 64-bit
         // 'darwin' on OSX
 
-        if(platform === "linux")
+        if (platform === "linux")
             var prePath = "../"
         else
             var prePath = "./"
@@ -113,7 +122,7 @@ module.exports = function (app, passport) {
         botChan.on("message", function (message) {
             var channel = message.channel;
             if (message.content === "winter2016") {
-                var pathToFile = path.join(prePath,'files', "winter2016.jpg");
+                var pathToFile = path.join(prePath, 'files', "winter2016.jpg");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
@@ -121,7 +130,7 @@ module.exports = function (app, passport) {
 
             }
             if (message.content === "Kappa") {
-                var pathToFile = path.join(prePath,'files', "Kappa.png");
+                var pathToFile = path.join(prePath, 'files', "Kappa.png");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
@@ -133,12 +142,19 @@ module.exports = function (app, passport) {
 
 
     app.get('/dashboard/bots/stop', function (req, res, next) {
-        botChan.logout(function (err) {
-            if (err)
-                console.log(err)
-            onlineStatus = false;
-            console.log("logged out")
-        });
+        if (onlineStatus == true) {
+            botChan.logout(function (err) {
+                if (err)
+                    console.log(err)
+                onlineStatus = false;
+                console.log("logged out")
+            });
+        }
+        else {
+            res.render('dashboard/bots.hbs', {
+                error: "Bot needs to be started first."
+            });
+        }
     });
 
     app.get('/botchan', function (req, res, next) {
