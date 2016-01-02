@@ -98,21 +98,22 @@ module.exports = function (app, passport) {
             }
         });
 
-        /*
-        os.platform();
+
+        var platform = os.platform();
         // 'linux' on Linux
         // 'win32' on Windows 32-bit
         // 'win64' on Windows 64-bit
         // 'darwin' on OSX
-        os.arch();
-        // 'x86' on 32-bit CPU architecture
-        // 'x64' on 64-bit CPU architecture
-        */
+
+        if(platform === "linux")
+            var prePath = "../"
+        else
+            var prePath = "./"
 
         botChan.on("message", function (message) {
             var channel = message.channel;
             if (message.content === "winter2016") {
-                var pathToFile = path.join('files', "winter2016.jpg");
+                var pathToFile = path.join(prePath,'files', "winter2016.jpg");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
@@ -120,7 +121,7 @@ module.exports = function (app, passport) {
 
             }
             if (message.content === "Kappa") {
-                var pathToFile = path.join('files', "Kappa.png");
+                var pathToFile = path.join(prePath,'files', "Kappa.png");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
