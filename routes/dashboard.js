@@ -2,9 +2,10 @@ var User = require('../models/user');
 var Discord = require("discord.js");
 var fs = require('fs');
 var path = require('path');
+var os = require('os');
 
 var botChan;
-var started = false;
+var onlineStatus = false;
 
 module.exports = function (app, passport) {
 
@@ -35,14 +36,14 @@ module.exports = function (app, passport) {
     });
 
     app.get('/dashboard/bots/start', function (req, res, next) {
-        if (!started) {
+        if (!onlineStatus) {
             botChan = new Discord.Client();
             configureBot();
             botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
                 if (err)
                     console.log("error logging in");
 
-                started = true;
+                onlineStatus = true;
                 console.log("login successful\ntoken:" + token);
             });
         }
@@ -59,7 +60,7 @@ module.exports = function (app, passport) {
         woorden["420 moe"] = "http://420.moe";
 
 
-        woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom"
+        woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom";
         woorden["radioKappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
         woorden["radioKappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
         woorden["radioKappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
@@ -71,13 +72,25 @@ module.exports = function (app, passport) {
         woorden["radioKappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
         woorden["radioKappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
         woorden["radioKappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
+        woorden["radioKappaPlaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
+
+        botChan.on("disconnected", function () {
+            onlineStatus = false;
+        });
 
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() in woorden)
                 botChan.reply(message, woorden[message.content.toLocaleLowerCase()]);
 
         });
+        /*
+         botChan.on("message", function (message) {
+         if (message.content in woorden)
+         botChan.reply(message, woorden[message.content]);
+
+         });
+         */
         botChan.on("message", function (message) {
             if (message.content === "radioKappaRandom") {
                 var random = getRandomIntInclusive(1, 11);
@@ -85,11 +98,21 @@ module.exports = function (app, passport) {
             }
         });
 
+        /*
+        os.platform();
+        // 'linux' on Linux
+        // 'win32' on Windows 32-bit
+        // 'win64' on Windows 64-bit
+        // 'darwin' on OSX
+        os.arch();
+        // 'x86' on 32-bit CPU architecture
+        // 'x64' on 64-bit CPU architecture
+        */
 
         botChan.on("message", function (message) {
             var channel = message.channel;
             if (message.content === "winter2016") {
-                var pathToFile = path.join('files',"winter2016.jpg");
+                var pathToFile = path.join('files', "winter2016.jpg");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
@@ -97,7 +120,7 @@ module.exports = function (app, passport) {
 
             }
             if (message.content === "Kappa") {
-                var pathToFile = path.join('files',"Kappa.png");
+                var pathToFile = path.join('files', "Kappa.png");
                 var stream = fs.createReadStream(pathToFile);
                 stream.on('end', function () {
                     console.log('End of data reached.');
@@ -112,11 +135,37 @@ module.exports = function (app, passport) {
         botChan.logout(function (err) {
             if (err)
                 console.log(err)
-            started = false;
+            onlineStatus = false;
             console.log("logged out")
         });
     });
 
+    app.get('/botchan', function (req, res, next) {
+        res.render('botchan/status.hbs', {
+            title: "Bot-Chan Status",
+            onlineStatus: onlineStatus,
+            //Bot-Info
+            botChan: botChan.user,
+            uptime: botChan.uptime / 60000,
+            //Servers
+            servers: botChan.servers,
+            //Members
+            members: botChan.servers.members
+        });
+    });
+    app.get('botchan/status', function (req, res, next) {
+        res.render('botchan/status.hbs', {
+            title: "Bot-Chan Status",
+            onlineStatus: onlineStatus,
+            //Bot-Info
+            botChan: botChan.user,
+            uptime: botChan.uptime / 60000,
+            //Servers
+            servers: botChan.servers,
+            //Members
+            members: botChan.servers.members
+        });
+    });
 
     function isLoggedIn(req, res, next) {
 
