@@ -158,30 +158,50 @@ module.exports = function (app, passport) {
     });
 
     app.get('/botchan', function (req, res, next) {
-        res.render('botchan/status.hbs', {
-            title: "Bot-Chan Status",
-            onlineStatus: onlineStatus,
-            //Bot-Info
-            botChan: botChan.user,
-            uptime: botChan.uptime / 60000,
-            //Servers
-            servers: botChan.servers,
-            //Members
-            members: botChan.servers.members
-        });
+        if(onlineStatus)
+        {
+            res.render('botchan/status.hbs', {
+                title: "Bot-Chan Status",
+                onlineStatus: onlineStatus,
+                //Bot-Info
+                botChan: botChan.user,
+                uptime: botChan.uptime / 60000,
+                //Servers
+                servers: botChan.servers,
+                //Members
+                members: botChan.servers.members
+            });
+        }
+        else {
+            res.render('botchan/status.hbs', {
+                title: "Bot-Chan Status",
+                onlineStatus: onlineStatus,
+            });
+        }
+
     });
-    app.get('botchan/status', function (req, res, next) {
-        res.render('botchan/status.hbs', {
-            title: "Bot-Chan Status",
-            onlineStatus: onlineStatus,
-            //Bot-Info
-            botChan: botChan.user,
-            uptime: botChan.uptime / 60000,
-            //Servers
-            servers: botChan.servers,
-            //Members
-            members: botChan.servers.members
-        });
+    app.get('/botchan/status', function (req, res, next) {
+        if(onlineStatus)
+        {
+            res.render('botchan/status.hbs', {
+                title: "Bot-Chan Status",
+                onlineStatus: onlineStatus,
+                //Bot-Info
+                botChan: botChan.user,
+                uptime: botChan.uptime / 60000,
+                //Servers
+                servers: botChan.servers,
+                //Members
+                members: botChan.servers.members
+            });
+        }
+        else
+        {
+            res.render('botchan/status.hbs', {
+                title: "Bot-Chan Status",
+                onlineStatus: onlineStatus,
+            });
+        }
     });
 
     function isLoggedIn(req, res, next) {
