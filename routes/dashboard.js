@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var Discord = require("discord.js");
+var request = require('request');
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
@@ -51,10 +52,10 @@ module.exports = function (app, passport) {
                 message: "Started Bot-Chan!"
             });
         }
-        else{
+        else {
             res.render('dashboard/bots.hbs', {
                 title: "Bot Management Panel",
-                message: "Bot-Chan already started!"
+                message: "Bot-Chan already running!"
             });
         }
 
@@ -119,6 +120,7 @@ module.exports = function (app, passport) {
         else
             var prePath = "./"
 
+        //Send Images
         botChan.on("message", function (message) {
             var channel = message.channel;
             if (message.content === "winter2016") {
@@ -137,6 +139,43 @@ module.exports = function (app, passport) {
                 });
             }
             botChan.sendFile(channel, stream, "");
+        });
+
+        //Twitch API
+        botChan.on("message", function (message) {
+            var strArray = message.content.split(" ");
+            if (strArray[0] == "!twitch") {
+                if (strArray[1] === "") {
+                    botChan.reply(message, "The !twitch command requires a channel name!\nExample: !twitch forsenlol");
+                }
+                else {
+                    request("https://api.twitch.tv/kraken/streams/" + strArray[1], function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            var json = JSON.parse(body);
+
+                            var jsonStreamData = json.stream;
+                            if (jsonStreamData === null) {
+                                botChan.reply(message, "\n"+strArray[1] + " is currently offline\nChannel: " + "http://www.twitch.tv/" + strArray[1]);
+                            }
+                            else {
+                                var jsonChannelData = jsonStreamData.channel;
+                                var name = jsonChannelData.name;
+                                var game = jsonChannelData.game;
+                                var title = jsonChannelData.status;
+                                var viewers = jsonStreamData.viewers;
+                                var url = jsonChannelData.url;
+                                botChan.reply(message, "\nStatus: online\n" + "Name: " + name + "\nGame: " + game + "\nTitle: " + title + "\nViewers: " + viewers + "\nurl: " + url);
+                            }
+                        }
+                        else {
+                            if (response.statusCode == 404) {
+                                botChan.reply(message, "Channel " + strArray[1] + " not found");
+                            }
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -158,8 +197,7 @@ module.exports = function (app, passport) {
     });
 
     app.get('/botchan', function (req, res, next) {
-        if(onlineStatus)
-        {
+        if (onlineStatus) {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
                 onlineStatus: onlineStatus,
@@ -181,8 +219,7 @@ module.exports = function (app, passport) {
 
     });
     app.get('/botchan/status', function (req, res, next) {
-        if(onlineStatus)
-        {
+        if (onlineStatus) {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
                 onlineStatus: onlineStatus,
@@ -195,14 +232,14 @@ module.exports = function (app, passport) {
                 members: botChan.servers.members
             });
         }
-        else
-        {
+        else {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
                 onlineStatus: onlineStatus,
             });
         }
     });
+
 
     function isLoggedIn(req, res, next) {
 

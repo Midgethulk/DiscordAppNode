@@ -27,6 +27,7 @@
     "passport-local": "latest",
     "passport-twitter": "latest",
     "req-flash": "0.0.2",
+    "request": "^2.67.0",
     "serve-favicon": "~2.3.0"
   }
 }
