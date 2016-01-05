@@ -156,7 +156,7 @@ module.exports = function (app, passport) {
 
                             var jsonStreamData = json.stream;
                             if (jsonStreamData === null) {
-                                botChan.reply(message, "\n"+strArray[1] + " is currently offline\nChannel: " + "http://www.twitch.tv/" + strArray[1]);
+                                botChan.reply(message, "\n" + strArray[1] + " is currently offline\nChannel: " + "http://www.twitch.tv/" + strArray[1]);
                             }
                             else {
                                 var jsonChannelData = jsonStreamData.channel;
@@ -171,6 +171,47 @@ module.exports = function (app, passport) {
                         else {
                             if (response.statusCode == 404) {
                                 botChan.reply(message, "Channel " + strArray[1] + " not found");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        //OMDb API
+        botChan.on("message", function (message) {
+            var messageContent = message.content;
+            var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
+            var movie = messageContent.substr(messageContent.indexOf(' ') + 1);
+
+            if (strCmd == "!movie") {
+                if (movie === "") {
+                    botChan.reply(message, "The !move command requires a channel name!\nExample: !movie Star Wars");
+                }
+                else {
+                    var srchString = movie.replace(/ /g, "+");
+                    request("http://www.omdbapi.com/?t=" + srchString+"&type=movie&r=json", function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            var json = JSON.parse(body);
+                            var response = json.Response;
+
+                            if (response === "False") {
+                                botChan.reply(message, "\nMovie: " + movie + " not found!");
+                            }
+
+                            if (response === "True") {
+                                var title = json.Title;
+                                var released = json.Released;
+                                var genre = json.Genre;
+                                var actors = json.Actors;
+                                var imdbUrl = json.imdbID;
+                                botChan.reply(message, "\nMovie Title: " + title + "\nReleased: " + released + "\nGenre: " + genre + "\nActors: " + actors + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl);
+                            }
+
+                        }
+                        else {
+                            if (response.statusCode == 404) {
+                                botChan.reply(message, "Error with request");
                             }
                         }
                     });
