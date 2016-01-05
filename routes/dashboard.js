@@ -185,11 +185,11 @@ module.exports = function (app, passport) {
 
             if (strCmd == "!movie") {
                 if (movie === "") {
-                    botChan.reply(message, "The !move command requires a channel name!\nExample: !movie Star Wars");
+                    botChan.reply(message, "The !movie command requires a move name!\nExample: !movie Star Wars");
                 }
                 else {
                     var srchString = movie.replace(/ /g, "+");
-                    request("http://www.omdbapi.com/?t=" + srchString+"&type=movie&r=json", function (error, response, body) {
+                    request("http://www.omdbapi.com/?t=" + srchString+"&type=movie&tomatoes=true&r=json", function (error, response, body) {
                         if (!error && response.statusCode == 200) {
 
                             var json = JSON.parse(body);
@@ -205,13 +205,50 @@ module.exports = function (app, passport) {
                                 var genre = json.Genre;
                                 var actors = json.Actors;
                                 var imdbUrl = json.imdbID;
-                                botChan.reply(message, "\nMovie Title: " + title + "\nReleased: " + released + "\nGenre: " + genre + "\nActors: " + actors + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl);
+                                var tomatoMeter = json.tomatoMeter;
+                                var tomatoUserMeter = json.tomatoUserMeter;
+                                botChan.reply(message, "\nMovie Title: " + title
+                                    + "\nReleased: " + released
+                                    + "\nGenre: " + genre
+                                    + "\nActors: " + actors
+                                    + "\nRotten Tomato Score: "+ tomatoMeter
+                                    + "\nRotten Tomato User Score: "+ tomatoUserMeter
+                                    + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl
+                                );
                             }
 
                         }
                         else {
                             if (response.statusCode == 404) {
                                 botChan.reply(message, "Error with request");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        //Shorten Links http://www.hnng.moe/api
+        botChan.on("message", function (message) {
+            var strArray = message.content.split(" ");
+            if (strArray[0] == "!shorten") {
+                if (strArray[1] === "") {
+                    botChan.reply(message, "The !shorten command requires a url name!\nExample: !shorten http://www.420.moe");
+                }
+                else {
+                    request("http://www.hnng.moe/shortapi.php?url=" + strArray[1], function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+
+                            if (body !== null || body !=="undefined") {
+                                botChan.reply(message, "Shortened url: "+body);
+                            }
+                            else{
+                                botChan.reply(message, "There was a problem creating the link.");
+                            }
+                        }
+                        else {
+                            if (response.statusCode == 404) {
+                                botChan.reply(message, "Error Creating link (404 ");
                             }
                         }
                     });
