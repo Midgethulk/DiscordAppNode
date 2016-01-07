@@ -8,6 +8,10 @@ var os = require('os');
 var botChan;
 var onlineStatus = false;
 
+//Test
+var Rule = require('../models/rule');
+var Bot = require('../models/bot');
+
 module.exports = function (app, passport) {
 
     app.get('/dashboard', function (req, res, next) {
@@ -68,6 +72,7 @@ module.exports = function (app, passport) {
         woorden["lenny"] = "( ͡° ͜ʖ ͡°)";
         woorden["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
         woorden["420 moe"] = "http://420.moe";
+        woorden["JOHN CENA"] = "https://www.youtube.com/watch?v=5LitDGyxFh4";
 
 
         woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom";
@@ -189,7 +194,7 @@ module.exports = function (app, passport) {
                 }
                 else {
                     var srchString = movie.replace(/ /g, "+");
-                    request("http://www.omdbapi.com/?t=" + srchString+"&type=movie&tomatoes=true&r=json", function (error, response, body) {
+                    request("http://www.omdbapi.com/?t=" + srchString + "&type=movie&tomatoes=true&r=json", function (error, response, body) {
                         if (!error && response.statusCode == 200) {
 
                             var json = JSON.parse(body);
@@ -211,8 +216,8 @@ module.exports = function (app, passport) {
                                     + "\nReleased: " + released
                                     + "\nGenre: " + genre
                                     + "\nActors: " + actors
-                                    + "\nRotten Tomato Score: "+ tomatoMeter
-                                    + "\nRotten Tomato User Score: "+ tomatoUserMeter
+                                    + "\nRotten Tomato Score: " + tomatoMeter
+                                    + "\nRotten Tomato User Score: " + tomatoUserMeter
                                     + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl
                                 );
                             }
@@ -239,10 +244,10 @@ module.exports = function (app, passport) {
                         if (!error && response.statusCode == 200) {
 
 
-                            if (body !== null || body !=="undefined") {
-                                botChan.reply(message, "Shortened url: "+body);
+                            if (body !== null || body !== "undefined") {
+                                botChan.reply(message, "Shortened url: " + body);
                             }
-                            else{
+                            else {
                                 botChan.reply(message, "There was a problem creating the link.");
                             }
                         }
@@ -316,6 +321,33 @@ module.exports = function (app, passport) {
                 onlineStatus: onlineStatus,
             });
         }
+    });
+    app.get('/mongoose/test', function (req, res, next) {
+
+        /*
+        var botChan = new Bot({email: "test@gmail.com", password: "test"});
+
+
+        botChan.save(function (err) {
+            if (err) return console.log(err);
+        });
+        var rulePing = new Rule({
+            command:"ping",
+            bot: botChan._id,
+            response:{
+                type:'single',
+                response:['pong']
+            }
+        });
+
+        rulePing.save(function (err) {
+            if (err) return console.log(err);
+            // thats it!
+        });
+        */
+        res.render('error.hbs', {
+            message: "Not implemented yet"
+        });
     });
 
 

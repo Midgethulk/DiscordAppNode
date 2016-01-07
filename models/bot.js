@@ -1,24 +1,14 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
-
-var botSchema = mongoose.Schema({
-    email        : String,
-    password     : String,
-    rules            : {
-
-    }
+var BotSchema = mongoose.Schema({
+    email: String,
+    password: String,
+    //rules        : [Rule]
+    rules: [{type: ObjectId, ref: 'Rule'}]
 });
 
-
-botSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
-
-// checking if password is valid
-botSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
-};
-
 // create the model for users and expose it to our app
-module.exports = mongoose.model('Bot', botSchema);
+module.exports = mongoose.model('Bot', BotSchema);
+
