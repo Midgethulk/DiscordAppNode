@@ -72,7 +72,7 @@ module.exports = function (app, passport) {
         woorden["lenny"] = "( ͡° ͜ʖ ͡°)";
         woorden["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
         woorden["420 moe"] = "http://420.moe";
-        woorden["JOHN CENA"] = "https://www.youtube.com/watch?v=5LitDGyxFh4";
+        //woorden["JOHN CENA"] = "https://www.youtube.com/watch?v=5LitDGyxFh4";
 
 
         woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom";
@@ -92,6 +92,14 @@ module.exports = function (app, passport) {
 
         botChan.on("disconnected", function () {
             onlineStatus = false;
+        });
+        //JOHN CENA! Can I speak to champ?
+        botChan.on("message", function (message) {
+            var msgLwr = message.content.toLocaleLowerCase();
+            var srchStr = "john cena"
+            if ( msgLwr.indexOf(srchStr) > -1)
+                botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
+
         });
 
         botChan.on("message", function (message) {
