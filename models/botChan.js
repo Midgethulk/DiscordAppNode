@@ -1,4 +1,5 @@
 var Discord = require("discord.js");
+var request = require('request');
 var os = require('os');
 var fs = require('fs');
 var path = require('path');
