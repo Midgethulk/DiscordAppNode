@@ -6,6 +6,9 @@ var path = require('path');
 var onlineStatus = false;
 var botChan;
 
+//Rule model
+var Rule = require('../models/rule');
+
 exports.onlineStatus = onlineStatus;
 module.exports = {
     onlineStatus: function () {
@@ -33,26 +36,32 @@ module.exports = {
         });
     },
     configure: function () {
-        var woorden = {};
-        woorden["ping"] = "pong";
-        woorden["lenny"] = "( ͡° ͜ʖ ͡°)";
-        woorden["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
-        woorden["420 moe"] = "http://420.moe";
-        woorden["typing game"] = "http://zty.pe/";
+        var command = {};
+        command["ping"] = "pong";
+        command["lenny"] = "( ͡° ͜ʖ ͡°)";
+        command["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
+        command["420 moe"] = "http://420.moe";
+        command["typing game"] = "http://zty.pe/";
+        command["dance"] = "http://i.imgur.com/CbDGwLv.gifv";
 
-        woorden["radioKappa"] = "\nWrong Syntax, please use one of these commands instead:\nradioKappa5\nradioKappaRandom";
-        woorden["radioKappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
-        woorden["radioKappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
-        woorden["radioKappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
-        woorden["radioKappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
-        woorden["radioKappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
-        woorden["radioKappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
-        woorden["radioKappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
-        woorden["radioKappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
-        woorden["radioKappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
-        woorden["radioKappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
-        woorden["radioKappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
-        woorden["radioKappaPlaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
+
+        command["radiokappa"] = "" +
+            "\nWrong Syntax, please use one of these commands instead:" +
+            "\nradioKappa 5" +
+            "\nradioKappaRandom" +
+            "\nradioKappaPlaylist";
+        command["radiokappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
+        command["radiokappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
+        command["radiokappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
+        command["radiokappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
+        command["radiokappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
+        command["radiokappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
+        command["radiokappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
+        command["radiokappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
+        command["radiokappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
+        command["radiokappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
+        command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
+        command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
 
         botChan.on("disconnected", function () {
@@ -89,21 +98,21 @@ module.exports = {
         });
 
         botChan.on("message", function (message) {
-            if (message.content.toLocaleLowerCase() in woorden)
-                botChan.reply(message, woorden[message.content.toLocaleLowerCase()]);
+            if (message.content.toLocaleLowerCase() in command)
+                botChan.reply(message, command[message.content.toLocaleLowerCase()]);
 
         });
         /*
          botChan.on("message", function (message) {
-         if (message.content in woorden)
-         botChan.reply(message, woorden[message.content]);
+         if (message.content in command)
+         botChan.reply(message, command[message.content]);
 
          });
          */
         botChan.on("message", function (message) {
             if (message.content === "radioKappaRandom") {
                 var random = getRandomIntInclusive(1, 11);
-                botChan.reply(message, woorden["radioKappa " + random.toString()]);
+                botChan.reply(message, command["radioKappa " + random.toString()]);
             }
         });
 
@@ -132,50 +141,41 @@ module.exports = {
                                 output = "Error joining joining voice channel: " + channelName;
                             else {
                                 output = "Joined voice channel: " + channelName;
-
-
-                                //TODO
-                                /*
-                                 var pathToFile = path.join(prePath, 'files', "nani-soreeeeee.mp3");
-                                 var stream = fs.createReadStream(pathToFile);
-                                 stream.on('end', function () {
-                                 connection.playStream(stream, function (err, str) {
-                                 if (err)
-                                 console.log(err);
-                                 else
-                                 console.log(str)
-
-                                 });
-                                 console.log('End of data reached.');
-                                 });
-                                 connection.playStream(stream, function (err, str) {
-                                 if (err)
-                                 console.log(err);
-                                 else
-                                 console.log(str)
-
-                                 });
-                                 */
                                 botChan.reply(message, output);
                             }
-
                         });
                         break;
                     }
 
                 }
             }
-            /*
-             Infinite loop
-             if (output === "") {
-             botChan.reply(message, "No server found with the name: " + channelName);
-             }
-             */
-            /*
-             var connection = bot.voiceConnection;
-             connection.playFile("http://www.myinstants.com/media/sounds/nani-soreeeeee.mp3");
-             */
+        });
 
+        botChan.on("message", function (message) {
+            if (message.content === "play") {
+                var connection = botChan.voiceConnection;
+                if (connection !== null) {
+                    var pathToFile = path.join(prePath, 'files', "nani.mp3");
+                    var stream = fs.createReadStream(pathToFile);
+                    stream.on('end', function () {
+                        connection.play(stream, function (err, str) {
+                            if (err)
+                                console.log(err);
+                            else
+                                console.log(str)
+
+                        });
+                        console.log('End of data reached.');
+                    });
+
+                    connection.playRawStream(stream, function (err, str) {
+                        if (err)
+                            console.log(err);
+                        else
+                            console.log(str)
+                    });
+                }
+            }
         });
 
         //Send Images

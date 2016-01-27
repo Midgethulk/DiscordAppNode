@@ -47,31 +47,24 @@
     <div class="row">
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-                    <span class="fa fa-users fa-5x"></span>
-                <div class="caption">
-                    <h3>Users</h3>
-                    <p>Management panel for users</p>
-                    <p><a href="/dashboard/users" class="btn btn-primary" role="button">Panel</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <span class="fa fa-cogs fa-5x"></span>
-                <div class="caption">
-                    <h3>Bot</h3>
-                    <p>Management panel for Bot Chan</p>
-                    <p><a href="/dashboard/bots" class="btn btn-primary" role="button">Panel</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
                 <span class="fa fa-book fa-5x"></span>
                 <div class="caption">
-                    <h3>Rule</h3>
-                    <p>Management panel for managing rules</p>
-                    <p><a href="/rule" class="btn btn-primary" role="button">Panel</a></p>
+                    <h3>Rules for Bot-Chan</h3>
+                    <p>Management for Bot-Chan rules</p>
+                    <p>
+                        <a href="/rule/overview" class="btn btn-primary" role="button">Overview</a>
+                        <a href="/rule/create" class="btn btn-primary" role="button">Create</a>
+                    </p>
+                    {{#if message}}
+                        <div class="alert alert-info">
+                            <p>{{message}}</p>
+                        </div>
+                    {{/if}}
+                    {{#if error}}
+                        <div class="alert alert-danger">
+                            <p>{{error}}</p>
+                        </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

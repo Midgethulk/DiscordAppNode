@@ -6,11 +6,6 @@ var path = require('path');
 //Seperate module for botChan
 var botChan = require('../models/botChan');
 
-//Test
-var Rule = require('../models/rule');
-var Bot = require('../models/bot');
-
-
 module.exports = function (app, passport) {
 
     app.get('/dashboard', function (req, res, next) {
@@ -56,8 +51,6 @@ module.exports = function (app, passport) {
                 message: "Bot-Chan already running!"
             });
         }
-
-
     });
 
     app.get('/dashboard/bots/stop', function (req, res, next) {
@@ -114,34 +107,6 @@ module.exports = function (app, passport) {
             });
         }
     });
-    app.get('/mongoose/test', function (req, res, next) {
-
-        /*
-         var botChan = new Bot({email: "test@gmail.com", password: "test"});
-
-
-         botChan.save(function (err) {
-         if (err) return console.log(err);
-         });
-         var rulePing = new Rule({
-         command:"ping",
-         bot: botChan._id,
-         response:{
-         type:'single',
-         response:['pong']
-         }
-         });
-
-         rulePing.save(function (err) {
-         if (err) return console.log(err);
-         // thats it!
-         });
-         */
-        res.render('error.hbs', {
-            message: "Not implemented yet"
-        });
-    });
-
 
     function isLoggedIn(req, res, next) {
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src=" https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/javascripts/rule.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/stylesheets/btstrpfix.css">
@@ -14,7 +15,8 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-items-collapse" aria-expanded="false">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-items-collapse" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -44,37 +46,55 @@
             </div>
         </div>
     </nav>
-    <div class="row">
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                    <span class="fa fa-users fa-5x"></span>
-                <div class="caption">
-                    <h3>Users</h3>
-                    <p>Management panel for users</p>
-                    <p><a href="/dashboard/users" class="btn btn-primary" role="button">Panel</a></p>
-                </div>
-            </div>
+    <div  class="col-lg-4">
+        <div class="list-group">
+            {{#each rules}}
+                <a href="#" class="list-group-item">
+                    {{this.command}}
+                    <span class="pull-right">
+                    <form class=".forms">
+                        <input name="idRuleList" type="hidden" value="{{this.id}}">
+                        <button name="btnEdit" type="submit" class="btn btn-xs btn-info">Edit</button>
+                    </form>
+                </span>
+
+                </a>
+            {{/each}}
         </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <span class="fa fa-cogs fa-5x"></span>
-                <div class="caption">
-                    <h3>Bot</h3>
-                    <p>Management panel for Bot Chan</p>
-                    <p><a href="/dashboard/bots" class="btn btn-primary" role="button">Panel</a></p>
-                </div>
+    </div>
+    <div class="col-lg-8 rules-list">
+        <form id="formEdit" class="form-horizontal">
+            <div class="form-group">
+                <label for="idRule">Id Rule</label>
+                <input id="idRule" type="text" placeholder="Rule id" class="form-control" readonly>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <span class="fa fa-book fa-5x"></span>
-                <div class="caption">
-                    <h3>Rule</h3>
-                    <p>Management panel for managing rules</p>
-                    <p><a href="/rule" class="btn btn-primary" role="button">Panel</a></p>
-                </div>
+            <div class="form-group">
+                <label for="command">Command</label>
+                <input id="command" type="text" placeholder="Command String" class="form-control">
             </div>
-        </div>
+            <!-- Radio Boxex -->
+            <div class="form-group">
+                <label>Reply</label><br>
+                <label class="radio-inline">
+                    <input type="radio" name="replyRadios" id="replyRadios1" value="true" checked>
+                    Yes
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="replyRadios" id="replyRadios2" value="false">
+                    No
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="response">Response</label>
+                <input id="response" type="text" placeholder="Responses" class="form-control">
+            </div>
+            <div class="form-group">
+                <div id="errorBox" class="alert alert-danger"></div>
+            </div>
+            <div class="form-group">
+                <button name="btnEdit" type="submit" class="btn btn-default">Save</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
