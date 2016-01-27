@@ -55,9 +55,13 @@ module.exports = {
         command["420 moe"] = "http://420.moe";
         command["typing game"] = "http://zty.pe/";
         command["dance"] = "http://i.imgur.com/CbDGwLv.gifv";
+        command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif"
+        command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
+        command["pirate"] = "http://cristgaming.com/pirate.swf";
+        command["hype"] = "http://zone-archive.com/tmp/hype_train.html";
 
 
-        command["radiokappa"] = "" +
+        command["radiokappa"] =
             "\nWrong Syntax, please use one of these commands instead:" +
             "\nradioKappa 5" +
             "\nradioKappaRandom" +
