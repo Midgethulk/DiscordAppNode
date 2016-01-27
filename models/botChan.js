@@ -13,15 +13,12 @@ var platform = os.platform();
 // 'darwin' on OSX
 var prePath = "";
 var Rule;
-if (platform === "linux") {
+if (platform === "linux")
     prePath = "../"
-    Rule = require('./models/rule');
-}
-
-else {
+else
     prePath = "./"
-    Rule = require('../models/rule');
-}
+
+Rule = require('../models/rule');
 
 
 exports.onlineStatus = onlineStatus;
