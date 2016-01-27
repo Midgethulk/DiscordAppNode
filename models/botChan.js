@@ -6,8 +6,23 @@ var path = require('path');
 var onlineStatus = false;
 var botChan;
 
-//Rule model
-var Rule = require('../models/rule');
+var platform = os.platform();
+// 'linux' on Linux
+// 'win32' on Windows 32-bit
+// 'win64' on Windows 64-bit
+// 'darwin' on OSX
+var prePath = "";
+var Rule;
+if (platform === "linux") {
+    prePath = "../"
+    Rule = require('./models/rule');
+}
+
+else {
+    prePath = "./"
+    Rule = require('../models/rule');
+}
+
 
 exports.onlineStatus = onlineStatus;
 module.exports = {
@@ -67,17 +82,6 @@ module.exports = {
         botChan.on("disconnected", function () {
             setOnlineStatus(false);
         });
-
-        var platform = os.platform();
-        // 'linux' on Linux
-        // 'win32' on Windows 32-bit
-        // 'win64' on Windows 64-bit
-        // 'darwin' on OSX
-
-        if (platform === "linux")
-            var prePath = "../"
-        else
-            var prePath = "./"
 
         //Bitch I'm Tom Hanks
         botChan.on("message", function (message) {
