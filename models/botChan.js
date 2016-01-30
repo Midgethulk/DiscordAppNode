@@ -59,6 +59,7 @@ module.exports = {
         command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
         command["pirate"] = "http://cristgaming.com/pirate.swf";
         command["hype"] = "http://zone-archive.com/tmp/hype_train.html";
+        command["❤ botchan"] = "http://i2.kym-cdn.com/photos/images/original/000/704/937/f38.jpg";
 
 
         command["radiokappa"] =
@@ -101,7 +102,7 @@ module.exports = {
                 botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
 
         });
-
+        //Process commands in command Arraty
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() in command)
                 botChan.reply(message, command[message.content.toLocaleLowerCase()]);

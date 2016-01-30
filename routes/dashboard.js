@@ -63,12 +63,12 @@ module.exports = function (app, passport) {
             });
         }
     });
-
+    //TODO FIX FOR PROPERTIES
     app.get('/botchan', function (req, res, next) {
         if (botChan.onlineStatus()) {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
-                onlineStatus: onlineStatus,
+                onlineStatus: botChan.onlineStatus(),
                 //Bot-Info
                 botChan: botChan.user,
                 uptime: botChan.uptime / 60000,
@@ -81,7 +81,7 @@ module.exports = function (app, passport) {
         else {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
-                onlineStatus: onlineStatus,
+                onlineStatus: botChan.onlineStatus(),
             });
         }
 
@@ -90,7 +90,7 @@ module.exports = function (app, passport) {
         if (botChan.onlineStatus()) {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
-                onlineStatus: onlineStatus,
+                onlineStatus: botChan.onlineStatus(),
                 //Bot-Info
                 botChan: botChan.user,
                 uptime: botChan.uptime / 60000,
@@ -103,7 +103,7 @@ module.exports = function (app, passport) {
         else {
             res.render('botchan/status.hbs', {
                 title: "Bot-Chan Status",
-                onlineStatus: onlineStatus,
+                onlineStatus: botChan.onlineStatus(),
             });
         }
     });
