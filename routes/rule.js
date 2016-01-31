@@ -32,6 +32,25 @@ module.exports = function (app, passport) {
             }
         });
     });
+
+    //Get All Rules
+    app.get('/rule/all', function (req, res, next) {d
+        Rule.find({},function (err,rules) {
+            if(err)
+            {
+                console.log(err);
+                res.jsonp({
+                    error: "Error loading rules"
+                });
+            }
+            else {
+                res.jsonp({
+                    rules:rules
+                });
+            }
+        });
+    });
+
     //Get Rule by id
     app.get('/rule/byid/:rid', function (req, res, next) {
 

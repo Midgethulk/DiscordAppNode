@@ -48,6 +48,7 @@ module.exports = {
         else
             prePath = "./"
 
+        //Hardcoded Commands
         botChan.setMaxListeners(20);
         var command = {};
         command["ping"] = "pong";
@@ -81,6 +82,17 @@ module.exports = {
         command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
+        //Database commands
+        Rule.find({}, function (err, rules) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                rules.forEach(function(rule){
+                    command[rule.command] = rule.response
+                });
+            }
+        });
 
         botChan.on("disconnected", function () {
             setOnlineStatus(false);
