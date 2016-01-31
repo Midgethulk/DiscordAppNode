@@ -49,16 +49,11 @@ module.exports = function (app, passport) {
                     rule : rule
                 });
             }
-            /*
-            // if no rule is found, return the message
-            if (!rule) {
-                res.jsonp({
-                    error:"No rule found with that id"
-                });
-            }
-            */
-
         });
+    });
+
+    app.post('/rule/edit', function (req, res, next){
+
     });
 
     //TODO CREATE POST

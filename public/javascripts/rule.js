@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#errorBox').hide();
 
+    //Load data in form when clicking on edit button
     $('form').on("submit",function () {
         event.preventDefault();
         if($(this).hasClass(".forms"))
@@ -42,6 +43,11 @@ $(document).ready(function () {
         }
 
     });
+    //Clear Form
+    $('#btnClear').on('click',function(){
+        $('#formEdit').trigger("reset");
+    });
+
     $('#formEdit').submit(function(){
         console.log("hi");
         event.preventDefault();

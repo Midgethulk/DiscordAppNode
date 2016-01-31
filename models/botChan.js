@@ -11,14 +11,8 @@ var platform = os.platform();
 // 'win32' on Windows 32-bit
 // 'win64' on Windows 64-bit
 // 'darwin' on OSX
-var prePath = "";
-var Rule;
-if (platform === "linux")
-    prePath = "../"
-else
-    prePath = "./"
 
-Rule = require('../models/rule');
+var Rule = require('../models/rule');
 
 
 exports.onlineStatus = onlineStatus;
@@ -48,6 +42,14 @@ module.exports = {
         });
     },
     configure: function () {
+        var prePath = "";
+        var Rule;
+        if (platform === "linux")
+            prePath = "../"
+        else
+            prePath = "./"
+
+        botChan.setMaxListeners(20);
         var command = {};
         command["ping"] = "pong";
         command["lenny"] = "( ͡° ͜ʖ ͡°)";
@@ -102,10 +104,29 @@ module.exports = {
                 botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
 
         });
-        //Process commands in command Arraty
+        //TODO TEST
+        botChan.on("message", function (message) {
+            if (message.content === "test") {
+                var output = "";
+                var msg = message;
+                var server = msg.channel.server;
+                var members = server.members;
+                output += "Online Members:\n"
+                for (var i = 0; i < members.length; i++) {
+                    //member is USER object
+                    var member = members[i];
+
+                    if (member.status === "online")
+                        output += members[i] + "\n";
+                }
+                botChan.sendMessage(message.channel, output);
+                //botChan.reply(message, output);
+            }
+        });
+        //Process commands in command Array
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() in command)
-                botChan.reply(message, command[message.content.toLocaleLowerCase()]);
+                botChan.sendMessage(message.channel, command[message.content.toLocaleLowerCase()]);
 
         });
         /*
@@ -130,7 +151,6 @@ module.exports = {
 
             if (strCmd === "!join") {
                 var channels = message.channel.server.channels;
-
                 var channel;
                 var channelName = "";
                 var channelType = "";
@@ -312,7 +332,7 @@ module.exports = {
                         }
                         else {
                             if (response.statusCode == 404) {
-                                botChan.reply(message, "Error Creating link (404 ");
+                                botChan.reply(message, "Error Creating link (404)");
                             }
                         }
                     });

@@ -18,6 +18,7 @@
     "flash": "^1.1.0",
     "hbs": "~3.1.0",
     "method-override": "latest",
+    "mongo-relation": "latest",
     "mongoose": "^4.3.4",
     "morgan": "~1.6.1",
     "mysql": "latest",
@@ -28,7 +29,6 @@
     "passport-twitter": "latest",
     "req-flash": "0.0.2",
     "request": "^2.67.0",
-    "serve-favicon": "~2.3.0",
-    "mongo-relation": "latest"
+    "serve-favicon": "~2.3.0"
   }
 }
