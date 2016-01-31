@@ -32,53 +32,131 @@ module.exports = function (app, passport) {
             }
         });
     });
+    //Get Rule by id
     app.get('/rule/byid/:rid', function (req, res, next) {
 
         var rid = req.params.rid;
-        Rule.findOne({ '_id' :  rid }, function(err, rule) {
+        Rule.findOne({'_id': rid}, function (err, rule) {
 
             // if there are any errors, return the error before anything else
             if (err || !rule) {
                 res.jsonp({
-                    error:"Error loading rule"
+                    error: "Error loading rule"
                 });
             }
-            else
-            {
+            else {
                 res.jsonp({
-                    rule : rule
+                    rule: rule
                 });
             }
         });
     });
 
-    app.post('/rule/edit', function (req, res, next){
+    //Edit rule
+    app.post('/rule/edit', function (req, res, next) {
+        var id = req.body.idRule;
+        var command = req.body.command;
+        var reply = req.body.replyRadios;
+        var response = req.body.response;
 
+
+        if (id !== "") {
+            //Check if rule in database
+            Rule.findOne({'_id': id}, function (err, ruleSrch) {
+                if (err)
+                    res.jsonp({
+                        error: "Error looking up the requested rule!"
+                    });
+                if (ruleSrch) {
+                    Rule.update({_id: id}, {response: response, reply: reply, command: command}, function (err, doc) {
+                        if (err)
+                            console.log(err);
+                        else
+                        {
+                            res.jsonp({
+                               message:"Successful edited the Rule!"
+                            });
+                        }
+                    });
+                }
+                else if (!err) {
+                    res.jsonp({
+                        error: "Cannot find Rule with that id!"
+                    });
+                }
+            });
+        }
+        else {
+            res.jsonp({
+                error:"Pick a rule to edit it"
+            })
+        }
     });
 
-    //TODO CREATE POST
-    app.get('/rule/create', function (req, res, next) {
+    //Add rule
+    app.post('/rule/add', function (req, res, next) {
+        var rule = new Rule();
+        var command = req.body.command;
+        var reply = req.body.replyRadios;
+        var response = req.body.response;
 
-        var rulePing = new Rule();
-        rulePing.command = "ping";
-        rulePing.reply = true;
-        rulePing.type =  "single";
-        rulePing.response = ["pong","hello"];
+        if(command === "" || response === "")
+        {
+            res.jsonp({
+               error: "Command or Response cannot not be empty when adding a new command!"
+            });
+        }
+        else {
+            Rule.findOne({'command': command}, function (err, ruleSrch) {
+                if (err)
+                    res.jsonp({
+                        error: "Error looking up database"
+                    });
+                if (!ruleSrch) {
+                    rule.command = command;
+                    rule.reply = reply;
+                    rule.response = response;
 
-        rulePing.save(function (err, resp) {
-            if (err)
-                return console.log(err);
-            else
-                res.send(resp.id);
+                    rule.save(function (err, resp) {
+                        if (err)
+                            return console.log(err);
+                        else {
+                            res.jsonp({
+                                rule: rule,
+                                message: "Added new command"
+                            });
+                        }
+
+                    });
+                }
+                else if (!err) {
+                    res.jsonp({
+                        error: "A rule with that command string already exists!"
+                    });
+                }
+            })
+        }
+    });
+
+    //Delete Rule
+    app.get('/rule/delete/:rid', function (req, res, next) {
+
+        var rid = req.params.rid;
+        Rule.find({'_id': rid}).remove(function (err) {
+
+            // if there are any errors, return the error before anything else
+            if (err) {
+                res.jsonp({
+                    error: "Error deleting rule"
+                });
+            }
+            else {
+                res.jsonp({
+                    message: "Deleted the rule"
+                });
+            }
         });
-        /*
-         res.render('error.hbs', {
-         message: "Not implemented yet"
-         });
-         */
     });
-
-
 
     function isLoggedIn(req, res, next) {
 

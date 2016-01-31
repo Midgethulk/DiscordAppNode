@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src=" https://code.jquery.com/jquery-2.1.4.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/javascripts/jquery.confirm.min.js"></script>
     <script src="/javascripts/rule.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -46,57 +47,81 @@
             </div>
         </div>
     </nav>
-    <div  class="col-lg-4">
-        <div class="list-group">
-            {{#each rules}}
-                <a href="#" class="list-group-item">
-                    {{this.command}}
-                    <span class="pull-right">
-                    <form class=".forms">
-                        <input name="idRuleList" type="hidden" value="{{this.id}}">
-                        <button name="btnEdit" type="submit" class="btn btn-xs btn-info">Edit</button>
-                    </form>
-                </span>
-
-                </a>
-            {{/each}}
+    <div class="row">
+        <div class="col-lg-4 col-md-12 col-sm-12">
+            <div class="list-group">
+                {{#each rules}}
+                    <a href="#" class="list-group-item clearfix">
+                        {{this.command}}
+                        <span class="pull-right">
+                            <form class=".formsItem">
+                                <input name="idRuleList" type="hidden" value="{{this.id}}">
+                                <button name="btnEdit" type="submit" class="btn btn-xs btn-info" value="edit">
+                                    Edit
+                                </button>
+                                <button name="btnDelete" type="submit" class="btn btn-xs btn-danger" value="delete">
+                                    Delete
+                                </button>
+                            </form>
+                        </span>
+                    </a>
+                {{/each}}
+            </div>
         </div>
-    </div>
-    <div class="col-lg-8 rules-list">
-        <form id="formEdit" class="form-horizontal">
-            <div class="form-group">
-                <label for="idRule">Id Rule</label>
-                <input id="idRule" type="text" placeholder="Rule id" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-                <label for="command">Command</label>
-                <input id="command" type="text" placeholder="Command String" class="form-control">
-            </div>
-            <!-- Radio Boxex -->
-            <div class="form-group">
-                <label>Reply</label><br>
-                <label class="radio-inline">
-                    <input type="radio" name="replyRadios" id="replyRadios1" value="true" checked>
-                    Yes
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="replyRadios" id="replyRadios2" value="false">
-                    No
-                </label>
-            </div>
-            <div class="form-group">
-                <label for="response">Response</label>
-                <input id="response" type="text" placeholder="Responses" class="form-control">
-            </div>
-            <div class="form-group">
-                <div id="errorBox" class="alert alert-danger"></div>
-            </div>
-            <div class="form-group">
-                <button name="btnEdit" type="submit" class="btn btn-primary">Save</button>
-                <button id="btnAdd" class="btn btn-success">Add</button>
-                <a id="btnClear" class="btn btn-default">Clear</a>
-            </div>
-        </form>
+        <div class="rules-list col-lg-8 col-md-12 col-sm-12">
+            <form id="formEdit" class="form-horizontal">
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label for="idRule">Id Rule</label>
+                        <input id="idRule" name="idRule" type="text" placeholder="Rule id" class="form-control"
+                               readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="command">Command</label>
+                        <input id="command" name="command" type="text" placeholder="Command String" class="form-control"
+                               required>
+                    </div>
+                </div>
+                <!-- Radio Boxex -->
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>Reply</label><br>
+                        <label class="radio-inline">
+                            <input type="radio" name="replyRadios" id="replyRadios1" value="true" checked>
+                            Yes
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="replyRadios" id="replyRadios2" value="false">
+                            No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label for="response">Response</label>
+                        <input id="response" name="response" type="text" placeholder="Responses" class="form-control"
+                               required>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div id="messageBox" class="alert alert-success"></div>
+                    </div>
+                    <div class="form-group">
+                        <div id="errorBox" class="alert alert-danger"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button id="btnEdit" type="submit" class="btn btn-primary">Save</button>
+                        <button id="btnAdd" class="btn btn-success">Add</button>
+                        <a id="btnClear" class="btn btn-default">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
