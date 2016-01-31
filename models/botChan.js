@@ -43,9 +43,8 @@ module.exports = {
     },
     configure: function () {
         var prePath = "";
-        var Rule;
         if (platform === "linux")
-            prePath = "../"
+            prePath = "./"
         else
             prePath = "./"
 
