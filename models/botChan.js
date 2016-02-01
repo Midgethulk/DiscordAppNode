@@ -4,6 +4,7 @@ var os = require('os');
 var fs = require('fs');
 var path = require('path');
 var onlineStatus = false;
+var restartStatus = false;
 var botChan;
 
 var platform = os.platform();
@@ -19,6 +20,12 @@ exports.onlineStatus = onlineStatus;
 module.exports = {
     onlineStatus: function () {
         return onlineStatus;
+    },
+    restartStatus: function () {
+        return restartStatus;
+    },
+    setRestartStatus: function (b) {
+        setRestartStatus(b);
     },
     create: function () {
         botChan = new Discord.Client();
@@ -40,6 +47,26 @@ module.exports = {
             setOnlineStatus(false);
             console.log("logged out")
         });
+    },
+    restart: function () {
+        if(onlineStatus)
+        {
+            botChan.logout(function (err) {
+                if (err)
+                    console.log(err)
+                setOnlineStatus(false);
+                console.log("logged out")
+            });
+        }
+        botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+            if (err)
+                console.log("error logging in");
+
+            setOnlineStatus(true);
+            console.log("login successful\ntoken:" + token);
+        });
+
+        console.log("Restarted botchan")
     },
     configure: function () {
         var prePath = "";
@@ -353,6 +380,9 @@ module.exports = {
     }
 };
 function setOnlineStatus(status) {
+    onlineStatus = status;
+};
+function setRestartStatus(status) {
     onlineStatus = status;
 };
 

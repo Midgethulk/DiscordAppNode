@@ -63,6 +63,14 @@ module.exports = function (app, passport) {
             });
         }
     });
+    app.get('/dashboard/bots/restart', function (req, res, next) {
+
+        botChan.restart();
+        res.render('dashboard/bots.hbs', {
+            message: "Restarted Bot-Chan"
+        });
+
+    });
     //TODO FIX FOR PROPERTIES
     app.get('/botchan', function (req, res, next) {
         if (botChan.onlineStatus()) {
