@@ -110,6 +110,7 @@ module.exports = {
         command["radiokappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
         command["radiokappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
         command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
+        command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
         botChan.on("disconnected", function () {
@@ -197,9 +198,10 @@ module.exports = {
 
          });
          */
+        //Radio Kappa random
         botChan.on("message", function (message) {
-            if (message.content === "radioKappaRandom") {
-                var random = getRandomIntInclusive(1, 11);
+            if (message.content.toLocaleLowerCase() === "radiokapparandom") {
+                var random = getRandomIntInclusive(1, 12);
                 botChan.reply(message, command["radiokappa " + random.toString()]);
             }
         });
