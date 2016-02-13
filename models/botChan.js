@@ -49,8 +49,9 @@ module.exports = {
         });
     },
     restart: function () {
-        if(onlineStatus)
-        {
+        //TODO: FIX CODE ABLE TO START WHILE STARTED
+        /*
+        if (onlineStatus) {
             botChan.logout(function (err) {
                 if (err)
                     console.log(err)
@@ -67,6 +68,7 @@ module.exports = {
         });
 
         console.log("Restarted botchan")
+        */
     },
     configure: function () {
         var prePath = "";
@@ -109,22 +111,21 @@ module.exports = {
         command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
+        botChan.on("disconnected", function () {
+            setOnlineStatus(false);
+        });
+
         //Database commands
         Rule.find({}, function (err, rules) {
             if (err) {
                 console.log(err);
             }
             else {
-                rules.forEach(function(rule){
+                rules.forEach(function (rule) {
                     command[rule.command] = rule.response
                 });
             }
         });
-
-        botChan.on("disconnected", function () {
-            setOnlineStatus(false);
-        });
-
         //Bitch I'm Tom Hanks
         botChan.on("message", function (message) {
             var msgLwr = message.content.toLocaleLowerCase();
@@ -163,8 +164,16 @@ module.exports = {
         });
         //Process commands in command Array
         botChan.on("message", function (message) {
-            if (message.content.toLocaleLowerCase() in command)
+            if (message.content.toLocaleLowerCase() in command) {
                 botChan.sendMessage(message.channel, command[message.content.toLocaleLowerCase()]);
+                var obj = {};
+                obj.wait = 0;
+                botChan.deleteMessage(message, obj, function (err) {
+                    if (err)
+                        console.log(err);
+                });
+            }
+
 
         });
         /*
@@ -177,10 +186,10 @@ module.exports = {
         botChan.on("message", function (message) {
             if (message.content === "radioKappaRandom") {
                 var random = getRandomIntInclusive(1, 11);
-                botChan.reply(message, command["radioKappa " + random.toString()]);
+                botChan.reply(message, command["radiokappa " + random.toString()]);
             }
         });
-
+        //Join Channel
         botChan.on("message", function (message) {
             var messageContent = message.content;
             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
@@ -214,7 +223,7 @@ module.exports = {
                 }
             }
         });
-
+        // Play Sound File
         botChan.on("message", function (message) {
             if (message.content === "play") {
                 var connection = botChan.voiceConnection;
