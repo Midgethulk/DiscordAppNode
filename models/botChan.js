@@ -82,6 +82,7 @@ module.exports = {
         var command = {};
         command["ping"] = "pong";
         command["lenny"] = "( ͡° ͜ʖ ͡°)";
+        command["lenny face"] = "( ͡° ͜ʖ ͡°)";
         command["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
         command["420 moe"] = "http://420.moe";
         command["typing game"] = "http://zty.pe/";
@@ -89,7 +90,7 @@ module.exports = {
         command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif"
         command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
         command["pirate"] = "http://cristgaming.com/pirate.swf";
-        command["hype"] = "http://zone-archive.com/tmp/hype_train.html";
+        command["hype train"] = "http://zone-archive.com/tmp/hype_train.html";
         command["❤ botchan"] = "http://i2.kym-cdn.com/photos/images/original/000/704/937/f38.jpg";
 
 
@@ -126,6 +127,33 @@ module.exports = {
                 });
             }
         });
+        //Process commands in command Array
+        botChan.on("message", function (message) {
+            if (message.content.toLocaleLowerCase() in command) {
+                botChan.sendMessage(message.channel, command[message.content.toLocaleLowerCase()]);
+                var obj = {};
+                obj.wait = 0;
+                botChan.deleteMessage(message, obj, function (err) {
+                    if (err)
+                        console.log(err);
+                });
+            }
+        });
+
+        botChan.on("messageUpdated", function (messageOld,messageNew) {
+            if (messageNew.content.toLocaleLowerCase() in command) {
+                botChan.sendMessage(messageNew.channel, command[messageNew.content.toLocaleLowerCase()]);
+                var obj = {};
+                obj.wait = 0;
+                botChan.deleteMessage(messageNew, obj, function (err) {
+                    if (err)
+                        console.log(err);
+                });
+            }
+
+
+        });
+
         //Bitch I'm Tom Hanks
         botChan.on("message", function (message) {
             var msgLwr = message.content.toLocaleLowerCase();
@@ -161,20 +189,6 @@ module.exports = {
                 botChan.sendMessage(message.channel, output);
                 //botChan.reply(message, output);
             }
-        });
-        //Process commands in command Array
-        botChan.on("message", function (message) {
-            if (message.content.toLocaleLowerCase() in command) {
-                botChan.sendMessage(message.channel, command[message.content.toLocaleLowerCase()]);
-                var obj = {};
-                obj.wait = 0;
-                botChan.deleteMessage(message, obj, function (err) {
-                    if (err)
-                        console.log(err);
-                });
-            }
-
-
         });
         /*
          botChan.on("message", function (message) {
