@@ -13,16 +13,16 @@ $(document).ready(function () {
             var $btn = $(document.activeElement);
             var btnValue = "";
             if (
-                /* there is an activeElement at all */
+                /* Check if there is an activeElement at all */
             $btn.length &&
 
-                /* it's a child of the form */
+                /* Check if it's a child of the form */
             $(this).has($btn) &&
 
-                /* it's really a submit element */
+                /* Check if it's really a submit element */
             $btn.is('button[type="submit"], input[type="submit"], input[type="image"]') &&
 
-                /* it has a "name" attribute */
+                /* Check if it has a "name" attribute */
             $btn.is('[name]')
             ) {
                 /* access $btn.attr("name") and $btn.val() for data */

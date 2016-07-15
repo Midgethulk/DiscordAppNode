@@ -115,6 +115,15 @@ module.exports = {
 
         botChan.on("disconnected", function () {
             setOnlineStatus(false);
+            botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+                if (err){
+                    console.log("error logging in");
+                }
+                else {
+                    setOnlineStatus(true);
+                    console.log("login successful\ntoken:" + token);
+                }
+            });
         });
 
         //Database commands
@@ -245,9 +254,8 @@ module.exports = {
                 var connection = botChan.voiceConnection;
                 if (connection !== null) {
                     var pathToFile = path.join(prePath, 'files', "nani.mp3");
-                    var stream = fs.createReadStream(pathToFile);
-                    stream.on('end', function () {
-                        connection.play(stream, function (err, str) {
+
+                        connection.playFile(pathToFile, 0.25, function (err, str) {
                             if (err)
                                 console.log(err);
                             else
@@ -255,15 +263,7 @@ module.exports = {
 
                         });
                         console.log('End of data reached.');
-                    });
-
-                    connection.playRawStream(stream, function (err, str) {
-                        if (err)
-                            console.log(err);
-                        else
-                            console.log(str)
-                    });
-                }
+                    };
             }
         });
 
@@ -326,45 +326,45 @@ module.exports = {
         });
         //OMDb API
         botChan.on("message", function (message) {
-            var messageContent = message.content;
-            var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
-            var movie = messageContent.substr(messageContent.indexOf(' ') + 1);
+                            var messageContent = message.content;
+                            var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
+                            var movie = messageContent.substr(messageContent.indexOf(' ') + 1);
 
-            if (strCmd == "!movie") {
-                if (movie === "") {
-                    botChan.reply(message, "The !movie command requires a move name!\nExample: !movie Star Wars");
-                }
-                else {
-                    var srchString = movie.replace(/ /g, "+");
-                    request("http://www.omdbapi.com/?t=" + srchString + "&type=movie&tomatoes=true&r=json", function (error, response, body) {
-                        if (!error && response.statusCode == 200) {
+                            if (strCmd == "!movie") {
+                                if (movie === "") {
+                                    botChan.reply(message, "The !movie command requires a move name!\nExample: !movie Star Wars");
+                                }
+                                else {
+                                    var srchString = movie.replace(/ /g, "+");
+                                    request("http://www.omdbapi.com/?t=" + srchString + "&type=movie&tomatoes=true&r=json", function (error, response, body) {
+                                        if (!error && response.statusCode == 200) {
 
-                            var json = JSON.parse(body);
-                            var response = json.Response;
+                                            var json = JSON.parse(body);
+                                            var response = json.Response;
 
-                            if (response === "False") {
-                                botChan.reply(message, "\nMovie: " + movie + " not found!");
-                            }
+                                            if (response === "False") {
+                                                botChan.reply(message, "\nMovie: " + movie + " not found!");
+                                            }
 
-                            if (response === "True") {
-                                var title = json.Title;
-                                var released = json.Released;
-                                var genre = json.Genre;
-                                var actors = json.Actors;
-                                var imdbUrl = json.imdbID;
-                                var tomatoMeter = json.tomatoMeter;
-                                var tomatoUserMeter = json.tomatoUserMeter;
-                                botChan.reply(message, "\nMovie Title: " + title
-                                    + "\nReleased: " + released
-                                    + "\nGenre: " + genre
-                                    + "\nActors: " + actors
-                                    + "\nRotten Tomato Score: " + tomatoMeter
-                                    + "\nRotten Tomato User Score: " + tomatoUserMeter
-                                    + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl
-                                );
-                            }
+                                            if (response === "True") {
+                                                var title = json.Title;
+                                                var released = json.Released;
+                                                var genre = json.Genre;
+                                                var actors = json.Actors;
+                                                var imdbUrl = json.imdbID;
+                                                var tomatoMeter = json.tomatoMeter;
+                                                var tomatoUserMeter = json.tomatoUserMeter;
+                                                botChan.reply(message, "\nMovie Title: " + title
+                                                    + "\nReleased: " + released
+                                                    + "\nGenre: " + genre
+                                                    + "\nActors: " + actors
+                                                    + "\nRotten Tomato Score: " + tomatoMeter
+                                                    + "\nRotten Tomato User Score: " + tomatoUserMeter
+                                                    + "\nIMDB URL: http://www.imdb.com/title/" + imdbUrl
+                                                );
+                                            }
 
-                        }
+                                        }
                         else {
                             if (response.statusCode == 404) {
                                 botChan.reply(message, "Error with request");
