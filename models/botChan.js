@@ -332,22 +332,30 @@ module.exports = {
         botChan.on("message", function (message) {
                             var messageContent = message.content;
                             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
-                            var movie = messageContent.substr(messageContent.indexOf(' ') + 1);
+                            var inputTitle = messageContent.substr(messageContent.indexOf(' ') + 1);
 
-                            if (strCmd == "!movie") {
-                                if (movie === "") {
+                            if (strCmd == "!movie" || strCmd == "!series") {
+                                if (inputTitle === "") {
                                     botChan.reply(message, "The !movie command requires a move name!\nExample: !movie Star Wars");
                                 }
                                 else {
-                                    var srchString = movie.replace(/ /g, "+");
-                                    request("http://www.omdbapi.com/?t=" + srchString + "&type=movie&tomatoes=true&r=json", function (error, response, body) {
+
+
+                                    var inputType = "";
+                                    if(strCmd == "!movie")
+                                        inputType = "movie";
+                                    else
+                                        inputType = "series";
+
+                                    var srchString = inputTitle.replace(/ /g, "+");
+                                    request("http://www.omdbapi.com/?t=" + srchString + "&type="+inputType+"&tomatoes=true&r=json", function (error, response, body) {
                                         if (!error && response.statusCode == 200) {
 
                                             var json = JSON.parse(body);
                                             var response = json.Response;
 
                                             if (response === "False") {
-                                                botChan.reply(message, "\nMovie: " + movie + " not found!");
+                                                botChan.reply(message, "\nMovie: " + inputTitle + " not found!");
                                             }
 
                                             if (response === "True") {
