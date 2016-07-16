@@ -114,16 +114,20 @@ module.exports = {
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
         botChan.on("disconnected", function () {
-            setOnlineStatus(false);
-            botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
-                if (err){
-                    console.log("error logging in");
-                }
-                else {
-                    setOnlineStatus(true);
-                    console.log("login successful\ntoken:" + token);
-                }
-            });
+            //Check if DC or manual shutdown
+            if(gettOnlineStatus() === true)
+            {
+                setOnlineStatus(false);
+                botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+                    if (err){
+                        console.log("error logging in");
+                    }
+                    else {
+                        setOnlineStatus(true);
+                        console.log("login successful\ntoken:" + token);
+                    }
+                });
+            }
         });
 
         //Database commands
@@ -406,6 +410,9 @@ module.exports = {
 };
 function setOnlineStatus(status) {
     onlineStatus = status;
+};
+function gettOnlineStatus() {
+    return onlineStatus;
 };
 function setRestartStatus(status) {
     onlineStatus = status;
