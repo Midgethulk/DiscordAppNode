@@ -21,6 +21,15 @@ module.exports = {
     onlineStatus: function () {
         return onlineStatus;
     },
+    getUser: function() {
+        return botChan.user;
+    },
+    getServers: function() {
+        return botChan.servers;
+    },
+    getUptime: function() {
+        return botChan.uptime;
+    },
     restartStatus: function () {
         return restartStatus;
     },
@@ -115,7 +124,7 @@ module.exports = {
 
         botChan.on("disconnected", function () {
             //Check if DC or manual shutdown
-            if(gettOnlineStatus() === true)
+            if(getOnlineStatus() === true)
             {
                 setOnlineStatus(false);
                 botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
@@ -419,7 +428,7 @@ module.exports = {
 function setOnlineStatus(status) {
     onlineStatus = status;
 };
-function gettOnlineStatus() {
+function getOnlineStatus() {
     return onlineStatus;
 };
 function setRestartStatus(status) {

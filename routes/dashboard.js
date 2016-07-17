@@ -100,12 +100,12 @@ module.exports = function (app, passport) {
                 title: "Bot-Chan Status",
                 onlineStatus: botChan.onlineStatus(),
                 //Bot-Info
-                botChan: botChan.user,
-                uptime: botChan.uptime / 60000,
+                botChan: botChan.getUser(),
+                uptime: botChan.getUptime() / 60000,
                 //Servers
-                servers: botChan.servers,
+                servers: botChan.getServers(),
                 //Members
-                members: botChan.servers.members
+                members: botChan.getServers().members
             });
         }
         else {
