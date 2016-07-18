@@ -265,14 +265,29 @@ module.exports = {
         // Play Sound File
         botChan.on("message", function (message) {
             //if(msg.content.startsWith(prefix+"play")) {
-            if (message.content === "play") {
+            var strArray = message.content.split(" ");
+
+            if (strArray[0] === "!play") {
                 //var connection = botChan.voiceConnection;
 
                 //Get Channel current user
                 let channel = message.author.voiceChannel;
 
                 if (channel !== null) {
-                    var file = path.join(prePath, 'files', "nani.mp3");
+
+                    var fileName = "";
+                    switch (strArray[1]){
+                        case "nani":
+                            fileName = "nani.mp3"
+                            break;
+                        case "mind":
+                            fileName = "mind.mp3"
+                            break;
+                        default:
+                            fileName = "nani.mp3"
+                            break;
+                    }
+                    var file = path.join(prePath, 'files',"audio",fileName);
 
                     botChan.joinVoiceChannel(channel).then(connection => {
                             connection.playFile(file)
