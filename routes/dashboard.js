@@ -14,7 +14,7 @@ module.exports = function (app, passport) {
         });
     });
 
-    app.get('/dashboard/users', function (req, res, next) {
+    app.get('/dashboard/users',isLoggedIn, function (req, res, next) {
         var userData = [];
         User.find({}, function (err, data) {
             if (err) {
@@ -71,29 +71,7 @@ module.exports = function (app, passport) {
         });
 
     });
-    //TODO FIX FOR PROPERTIES
-    app.get('/botchan', function (req, res, next) {
-        if (botChan.onlineStatus()) {
-            res.render('botchan/status.hbs', {
-                title: "Bot-Chan Status",
-                onlineStatus: botChan.onlineStatus(),
-                //Bot-Info
-                botChan: botChan.user,
-                uptime: botChan.uptime / 60000,
-                //Servers
-                servers: botChan.servers,
-                //Members
-                members: botChan.servers.members
-            });
-        }
-        else {
-            res.render('botchan/status.hbs', {
-                title: "Bot-Chan Status",
-                onlineStatus: botChan.onlineStatus(),
-            });
-        }
 
-    });
     app.get('/botchan/status', function (req, res, next) {
         if (botChan.onlineStatus()) {
             res.render('botchan/status.hbs', {
@@ -123,7 +101,7 @@ module.exports = function (app, passport) {
             return next();
 
         // if they aren't redirect them to the home page
-        res.redirect('/');
+        res.redirect('/login');
     }
 
     function needsGroup(group) {
