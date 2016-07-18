@@ -3,6 +3,7 @@ var request = require('request');
 var os = require('os');
 var fs = require('fs');
 var path = require('path');
+var opus = require('node-opus');
 var onlineStatus = false;
 var restartStatus = false;
 var botChan;
@@ -263,20 +264,32 @@ module.exports = {
         });
         // Play Sound File
         botChan.on("message", function (message) {
+            //if(msg.content.startsWith(prefix+"play")) {
             if (message.content === "play") {
-                var connection = botChan.voiceConnection;
+                //var connection = botChan.voiceConnection;
+
+                let channel = message.author.voiceChannel;
+
                 if (connection !== null) {
-                    var pathToFile = path.join(prePath, 'files', "nani.mp3");
+                    var file = path.join(prePath, 'files', "nani.mp3");
 
-                        connection.playFile(pathToFile, 0.25, function (err, str) {
-                            if (err)
-                                console.log(err);
-                            else
-                                console.log(str)
-
+                    botChan.joinVoiceChannel(channel).then(connection => {
+                            connection.playFile(file)
+                                .then(intent => {
+                                    intent.on("end", () => {
+                                        console.log("Playback Ended");
+                                        botChan.leaveVoiceChannel(channel);
+                                    })
+                                    intent.on("error", (err) => {
+                                        console.log('Playback Error: ' + err);
+                                        botChan.leaveVoiceChannel(channel);
+                                    });
+                                })
+                        })
+                        .catch(err => {
+                            console.log('Error joining voice channel: ' + err);
                         });
-                        console.log('End of data reached.');
-                    };
+                }
             }
         });
 
@@ -409,6 +422,10 @@ module.exports = {
 
                             if (body !== null || body !== "undefined") {
                                 botChan.reply(message, "Shortened url: " + body);
+                                botChan.deleteMessage(message, obj, function (err) {
+                                    if (err)
+                                        console.log(err);
+                                });
                             }
                             else {
                                 botChan.reply(message, "There was a problem creating the link.");
