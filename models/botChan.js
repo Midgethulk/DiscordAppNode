@@ -268,6 +268,7 @@ module.exports = {
             if (message.content === "play") {
                 //var connection = botChan.voiceConnection;
 
+                //Get Channel current user
                 let channel = message.author.voiceChannel;
 
                 if (channel !== null) {
