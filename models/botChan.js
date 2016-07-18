@@ -270,7 +270,7 @@ module.exports = {
 
                 let channel = message.author.voiceChannel;
 
-                if (connection !== null) {
+                if (channel !== null) {
                     var file = path.join(prePath, 'files', "nani.mp3");
 
                     botChan.joinVoiceChannel(channel).then(connection => {
