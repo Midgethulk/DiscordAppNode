@@ -262,12 +262,13 @@ module.exports = {
                 }
             }
         });
+
         // Play Sound File
         botChan.on("message", function (message) {
             //if(msg.content.startsWith(prefix+"play")) {
             var strArray = message.content.split(" ");
 
-            if (strArray[0] === "!play") {
+            if (strArray[0] === "!play" || strArray[0] === "!p" ) {
                 //var connection = botChan.voiceConnection;
 
                 //Get Channel current user
@@ -275,7 +276,7 @@ module.exports = {
 
                 if (channel !== null) {
 
-                    var fileName
+                    var fileName = "";
                     if (strArray[1] === "")
                         fileName = "nani.mp3";
                     else
