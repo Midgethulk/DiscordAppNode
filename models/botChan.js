@@ -275,36 +275,40 @@ module.exports = {
 
                 if (channel !== null) {
 
-                    var fileName = "";
-                    switch (strArray[1]){
-                        case "nani":
-                            fileName = "nani.mp3"
-                            break;
-                        case "mind":
-                            fileName = "mind.mp3"
-                            break;
-                        default:
-                            fileName = "nani.mp3"
-                            break;
-                    }
+                    var fileName
+                    if (strArray[1] === "")
+                        fileName = "nani.mp3";
+                    else
+                        fileName = strArray[1] + ".mp3";
+
                     var file = path.join(prePath, 'files',"audio",fileName);
 
-                    botChan.joinVoiceChannel(channel).then(connection => {
-                            connection.playFile(file)
-                                .then(intent => {
-                                    intent.on("end", () => {
-                                        console.log("Playback Ended");
-                                        botChan.leaveVoiceChannel(channel);
+                    //Check if file exists
+                    fs.access(file, fs.F_OK, function(err) {
+                        if (!err) {
+                        botChan.joinVoiceChannel(channel).then(connection => {
+                                connection.playFile(file)
+                                    .then(intent => {
+                                        intent.on("end", () => {
+                                            console.log("Playback Ended");
+                                            botChan.leaveVoiceChannel(channel);
+                                        })
+                                        intent.on("error", (err) => {
+                                            console.log('Playback Error: ' + err);
+                                            botChan.leaveVoiceChannel(channel);
+                                        });
                                     })
-                                    intent.on("error", (err) => {
-                                        console.log('Playback Error: ' + err);
-                                        botChan.leaveVoiceChannel(channel);
-                                    });
-                                })
-                        })
-                        .catch(err => {
-                            console.log('Error joining voice channel: ' + err);
-                        });
+                            })
+                            .catch(err => {
+                                console.log('Error joining voice channel: ' + err);
+                            });
+                        } else {
+                            output = "Unable to find sound file for '" + strArray[1] + "'";
+                            botChan.reply(message, output);
+                        }
+                    });
+
+
                 }
             }
         });
