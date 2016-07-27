@@ -315,13 +315,15 @@ module.exports = {
         //Send Images
         botChan.on("message", function (message) {
 
+            var strArray = message.content.split(" ");
+
             var channel = message.channel;
 
             var fileName = "";
             if (strArray[1] === "")
-                fileName = "Kappa.png";
+                fileName = "";
             else
-                fileName = strArray[1] + ".png";
+                fileName = strArray[0] + ".png";
 
             var file = path.join(prePath, 'files',"img",fileName);
 
@@ -338,8 +340,6 @@ module.exports = {
                     botChan.reply(message, output);
                 }
             });
-
-
         });
 
         //Twitch API
