@@ -316,30 +316,32 @@ module.exports = {
         botChan.on("message", function (message) {
 
             var strArray = message.content.split(" ");
-
             var channel = message.channel;
 
-            var fileName = "";
-            if (strArray[1] === "")
-                fileName = "";
-            else
-                fileName = strArray[0] + ".png";
+            if ((strArray[0] === "Kappa") || (strArray[0] === "!img"))
+            {
+                var fileName = "";
+                if (strArray[0] === "Kappa")
+                    fileName = "Kappa.png";
+                else
+                    fileName = strArray[1] + ".png";
 
-            var file = path.join(prePath, 'files',"img",fileName);
+                var file = path.join(prePath, 'files',"img",fileName);
 
-            //Check if file exists
-            fs.access(file, fs.F_OK, function(err) {
-                if (!err) {
-                    var stream = fs.createReadStream(file);
-                    stream.on('end', function () {
-                        console.log('End of data reached.');
-                    });
-                    botChan.sendFile(channel, stream, "");
-                } else {
-                    output = "Unable to find image file for '" + strArray[1] + "'";
-                    botChan.reply(message, output);
-                }
-            });
+                //Check if file exists
+                fs.access(file, fs.F_OK, function(err) {
+                    if (!err) {
+                        var stream = fs.createReadStream(file);
+                        stream.on('end', function () {
+                            console.log('End of data reached.');
+                        });
+                        botChan.sendFile(channel, stream, "");
+                    } else {
+                        output = "Unable to find image file for '" + strArray[1] + "'";
+                        botChan.reply(message, output);
+                    }
+                });
+            }
         });
 
         //Twitch API
