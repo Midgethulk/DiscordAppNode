@@ -178,6 +178,7 @@ module.exports = {
 
         });
 
+        //TODO Make general method
         //Bitch I'm Tom Hanks
         botChan.on("message", function (message) {
             var msgLwr = message.content.toLocaleLowerCase();
@@ -195,6 +196,7 @@ module.exports = {
                 botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
 
         });
+
         //TODO TEST
         botChan.on("message", function (message) {
             if (message.content === "test") {
@@ -214,13 +216,8 @@ module.exports = {
                 //botChan.reply(message, output);
             }
         });
-        /*
-         botChan.on("message", function (message) {
-         if (message.content in command)
-         botChan.reply(message, command[message.content]);
 
-         });
-         */
+
         //Radio Kappa random
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() === "radiokapparandom") {
@@ -228,6 +225,7 @@ module.exports = {
                 botChan.reply(message, command["radiokappa " + random.toString()]);
             }
         });
+
         //Join Channel
         botChan.on("message", function (message) {
             var messageContent = message.content;
@@ -316,23 +314,32 @@ module.exports = {
 
         //Send Images
         botChan.on("message", function (message) {
-            var channel = message.channel;
-            if (message.content === "winter2016") {
-                var pathToFile = path.join(prePath, 'files', "winter2016.jpg");
-                var stream = fs.createReadStream(pathToFile);
-                stream.on('end', function () {
-                    console.log('End of data reached.');
-                });
 
-            }
-            if (message.content === "Kappa") {
-                var pathToFile = path.join(prePath, 'files', "Kappa.png");
-                var stream = fs.createReadStream(pathToFile);
-                stream.on('end', function () {
-                    console.log('End of data reached.');
-                });
-            }
-            botChan.sendFile(channel, stream, "");
+            var channel = message.channel;
+
+            var fileName = "";
+            if (strArray[1] === "")
+                fileName = "Kappa.png";
+            else
+                fileName = strArray[1] + ".png";
+
+            var file = path.join(prePath, 'files',"img",fileName);
+
+            //Check if file exists
+            fs.access(file, fs.F_OK, function(err) {
+                if (!err) {
+                    var stream = fs.createReadStream(file);
+                    stream.on('end', function () {
+                        console.log('End of data reached.');
+                    });
+                    botChan.sendFile(channel, stream, "");
+                } else {
+                    output = "Unable to find image file for '" + strArray[1] + "'";
+                    botChan.reply(message, output);
+                }
+            });
+
+
         });
 
         //Twitch API
@@ -371,6 +378,7 @@ module.exports = {
                 }
             }
         });
+
         //OMDb API
         botChan.on("message", function (message) {
                             var messageContent = message.content;
@@ -423,38 +431,6 @@ module.exports = {
                         else {
                             if (response.statusCode == 404) {
                                 botChan.reply(message, "Error with request");
-                            }
-                        }
-                    });
-                }
-            }
-        });
-        //Shorten Links http://www.hnng.moe/api
-        botChan.on("message", function (message) {
-            var strArray = message.content.split(" ");
-            if (strArray[0] == "!shorten") {
-                if (strArray[1] === "") {
-                    botChan.reply(message, "The !shorten command requires a url name!\nExample: !shorten http://www.420.moe");
-                }
-                else {
-                    request("http://www.hnng.moe/shortapi.php?url=" + strArray[1], function (error, response, body) {
-                        if (!error && response.statusCode == 200) {
-
-
-                            if (body !== null || body !== "undefined") {
-                                botChan.reply(message, "Shortened url: " + body);
-                                botChan.deleteMessage(message, obj, function (err) {
-                                    if (err)
-                                        console.log(err);
-                                });
-                            }
-                            else {
-                                botChan.reply(message, "There was a problem creating the link.");
-                            }
-                        }
-                        else {
-                            if (response.statusCode == 404) {
-                                botChan.reply(message, "Error Creating link (404)");
                             }
                         }
                     });
