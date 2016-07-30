@@ -42,50 +42,26 @@ module.exports = {
         //configure();
     },
     login: function () {
-        botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
-            if (err)
-                console.log("error logging in");
-
-            setOnlineStatus(true);
-            console.log("login successful\ntoken:" + token);
-        })
+        login();
     },
     logout: function () {
-        botChan.logout(function (err) {
-            if (err)
-                console.log(err)
-            setOnlineStatus(false);
-            console.log("logged out")
-        });
+        logout();
     },
     restart: function () {
         //TODO: FIX CODE ABLE TO START WHILE STARTED
         /*
-        if (onlineStatus) {
-            botChan.logout(function (err) {
-                if (err)
-                    console.log(err)
-                setOnlineStatus(false);
-                console.log("logged out")
-            });
-        }
-        botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
-            if (err)
-                console.log("error logging in");
+        logout()
+        if (getOnlineStatus() === false)
+                login();
 
-            setOnlineStatus(true);
-            console.log("login successful\ntoken:" + token);
-        });
-
-        console.log("Restarted botchan")
         */
     },
     configure: function () {
         var prePath = "";
         if (platform === "linux")
-            prePath = "./"
+            prePath = "./";
         else
-            prePath = "./"
+            prePath = "./";
 
         //Hardcoded Commands
         botChan.setMaxListeners(20);
@@ -128,15 +104,7 @@ module.exports = {
             if(getOnlineStatus() === true)
             {
                 setOnlineStatus(false);
-                botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
-                    if (err){
-                        console.log("error logging in");
-                    }
-                    else {
-                        setOnlineStatus(true);
-                        console.log("login successful\ntoken:" + token);
-                    }
-                });
+                login()
             }
         });
 
@@ -443,13 +411,34 @@ module.exports = {
 };
 function setOnlineStatus(status) {
     onlineStatus = status;
-};
+}
 function getOnlineStatus() {
     return onlineStatus;
-};
+}
 function setRestartStatus(status) {
     onlineStatus = status;
-};
+}
+
+function login () {
+    botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+        if (err){
+            console.log("error logging in");
+        }
+        else{
+            setOnlineStatus(true);
+            console.log("login successful\ntoken:" + token);
+        }
+    })
+}
+
+function logout() {
+    botChan.logout(function (err) {
+        if (err)
+            console.log(err)
+        setOnlineStatus(false);
+        console.log("logged out")
+    });
+}
 
 function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
