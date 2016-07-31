@@ -66,6 +66,8 @@ module.exports = {
         //Hardcoded Commands
         botChan.setMaxListeners(20);
         var command = {};
+        var commands = [];
+
         command["ping"] = "pong";
         command["lenny"] = "( ͡° ͜ʖ ͡°)";
         command["lenny face"] = "( ͡° ͜ʖ ͡°)";
@@ -116,9 +118,11 @@ module.exports = {
             else {
                 rules.forEach(function (rule) {
                     command[rule.command] = rule.response
+                    commands.push(rule.command);
                 });
             }
         });
+
         //Process commands in command Array
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() in command) {
@@ -144,6 +148,20 @@ module.exports = {
             }
 
 
+        });
+
+
+        //Process commands in command Array
+        botChan.on("message", function (message) {
+            if (message.content.toLocaleLowerCase() === "!commands") {
+
+                var commandsString = "";
+                for(var i = 0; i < commands.length; i++)
+                {
+                    commandsString += commands[i] + "\n";
+                }
+                botChan.sendMessage(message.channel, commandsString);
+            }
         });
 
         //TODO Make general method
