@@ -147,9 +147,7 @@ module.exports = {
                 });
             }
 
-
         });
-
 
         //Process commands in command Array
         botChan.on("message", function (message) {
