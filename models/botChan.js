@@ -436,7 +436,9 @@ function setRestartStatus(status) {
 }
 
 function login () {
-    botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+
+    //botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
+    botChan.loginWithToken("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs", function (err, token) {
         if (err){
             console.log("error logging in");
         }
