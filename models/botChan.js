@@ -4,9 +4,11 @@ var os = require('os');
 var fs = require('fs');
 var path = require('path');
 var opus = require('node-opus');
+var botChan;
 var onlineStatus = false;
 var restartStatus = false;
-var botChan;
+var prefix = "!";
+
 
 var platform = os.platform();
 // 'linux' on Linux
@@ -151,25 +153,27 @@ module.exports = {
 
         //Process commands in command Array
         botChan.on("message", function (message) {
-            if (message.content.toLocaleLowerCase() === "!commands") {
+            var commandsString = "";
+            console.log(prefix + "commands");
+            if (message.content.toLocaleLowerCase() === (prefix +"commands")) {
 
-                var commandsString = "";
                 for(var i = 0; i < commands.length; i++)
                 {
                     commandsString += commands[i] + "\n";
                 }
                 botChan.sendMessage(message.channel, commandsString);
             }
-        });
-
-        //TODO Make general method
-        //Bitch I'm Tom Hanks
-        botChan.on("message", function (message) {
-            var msgLwr = message.content.toLocaleLowerCase();
-            var srchStr = "tom hanks"
-            if (msgLwr.indexOf(srchStr) > -1)
-                botChan.reply(message, "https://www.youtube.com/watch?v=JFRohrsZZO0");
-
+            if (message.content.toLocaleLowerCase() === prefix+"commands audio") {
+                var audioPath = path.join(prePath, 'files',"audio");
+                fs.readdir(audioPath, function (er, files) {
+                    for(var i = 0; i < files.length; i++)
+                    {
+                        var cmd = files[i].replace(".mp3","");
+                        commandsString += cmd + "\n";
+                    }
+                    botChan.sendMessage(message.channel, commandsString);
+                });
+            }
         });
 
         //JOHN CENA! Can I speak to champ?
@@ -217,7 +221,7 @@ module.exports = {
             var voiceChannelInput = messageContent.substr(messageContent.indexOf(' ') + 1);
             var output = "";
 
-            if (strCmd === "!join") {
+            if (strCmd === prefix+"join") {
                 var channels = message.channel.server.channels;
                 var channel;
                 var channelName = "";
@@ -250,7 +254,7 @@ module.exports = {
             //if(msg.content.startsWith(prefix+"play")) {
             var strArray = message.content.split(" ");
 
-            if (strArray[0] === "!play" || strArray[0] === "!p" ) {
+            if ((strArray[0] === prefix+"play") || (strArray[0] === prefix+"p") ) {
                 //var connection = botChan.voiceConnection;
 
                 //Get Channel current user
@@ -302,7 +306,7 @@ module.exports = {
             var strArray = message.content.split(" ");
             var channel = message.channel;
 
-            if ((strArray[0] === "Kappa") || (strArray[0] === "!img"))
+            if ((strArray[0] === "Kappa") || (strArray[0] === prefix + "img"))
             {
                 var fileName = "";
                 if (strArray[0] === "Kappa")
@@ -331,9 +335,9 @@ module.exports = {
         //Twitch API
         botChan.on("message", function (message) {
             var strArray = message.content.split(" ");
-            if (strArray[0] == "!twitch") {
+            if (strArray[0] == prefix +"twitch") {
                 if (strArray[1] === "") {
-                    botChan.reply(message, "The !twitch command requires a channel name!\nExample: !twitch forsenlol");
+                    botChan.reply(message, "The "+prefix+"twitch command requires a channel name!\nExample: "+prefix+"twitch forsenlol");
                 }
                 else {
                     request("https://api.twitch.tv/kraken/streams/" + strArray[1], function (error, response, body) {
@@ -371,15 +375,15 @@ module.exports = {
                             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
                             var inputTitle = messageContent.substr(messageContent.indexOf(' ') + 1);
 
-                            if (strCmd == "!movie" || strCmd == "!series") {
+                            if ((strCmd == prefix+"movie") || (strCmd == prefix+"series")) {
                                 if (inputTitle === "") {
-                                    botChan.reply(message, "The !movie command requires a move name!\nExample: !movie Star Wars");
+                                    botChan.reply(message, "The"+prefix+"movie command requires a move name!\nExample:"+prefix+"movie Star Wars");
                                 }
                                 else {
 
 
                                     var inputType = "";
-                                    if(strCmd == "!movie")
+                                    if(strCmd == prefix+"movie")
                                         inputType = "movie";
                                     else
                                         inputType = "series";

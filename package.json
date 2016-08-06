@@ -16,6 +16,7 @@
     "express-flash": "latest",
     "express-session": "latest",
     "flash": "latest",
+    "glob": "^7.0.5",
     "hbs": "latest",
     "method-override": "latest",
     "mongo-relation": "latest",
