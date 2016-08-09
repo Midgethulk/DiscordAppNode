@@ -4,6 +4,7 @@ var os = require('os');
 var fs = require('fs');
 var path = require('path');
 var opus = require('node-opus');
+var sprintf = require("sprintf-js").sprintf;
 var botChan;
 var onlineStatus = false;
 var restartStatus = false;
@@ -154,7 +155,7 @@ module.exports = {
         //Process commands in command Array
         botChan.on("message", function (message) {
             var commandsString = "";
-            console.log(prefix + "commands");
+
             if (message.content.toLocaleLowerCase() === (prefix +"commands")) {
 
                 for(var i = 0; i < commands.length; i++)
@@ -163,13 +164,25 @@ module.exports = {
                 }
                 botChan.sendMessage(message.channel, commandsString);
             }
+
             if (message.content.toLocaleLowerCase() === prefix+"commands audio") {
                 var audioPath = path.join(prePath, 'files',"audio");
+                //TODO: MAKE IT PRETTY
+                //https://www.npmjs.com/package/sprintf-js
                 fs.readdir(audioPath, function (er, files) {
-                    for(var i = 0; i < files.length; i++)
+                    for(var i = 0; i < files.length; i+=2)
                     {
-                        var cmd = files[i].replace(".mp3","");
-                        commandsString += cmd + "\n";
+                        var stringLength = 0;
+                        cmd1 = "";
+                        cmd2 = "";
+
+                        var cmd1 = files[i].replace(".mp3","");
+                        stringLength = 20- cmd1.trim().length;
+                        if (files[i+1] !== undefined)
+                        var cmd2 = files[i+1].replace(".mp3","");
+
+                        var line = sprintf("%-"+stringLength+"s %s\n",cmd1,cmd2);
+                        commandsString += line;
                     }
                     botChan.sendMessage(message.channel, commandsString);
                 });
@@ -179,7 +192,7 @@ module.exports = {
         //JOHN CENA! Can I speak to champ?
         botChan.on("message", function (message) {
             var msgLwr = message.content.toLocaleLowerCase();
-            var srchStr = "john cena"
+            var srchStr = "john cena";
             if (msgLwr.indexOf(srchStr) > -1)
                 botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
 
