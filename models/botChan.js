@@ -285,7 +285,7 @@ module.exports = {
 
                     //Check if file exists
                     fs.access(file, fs.F_OK, function(err) {
-                        stream = fs.createReadStream(file,{});
+                        var stream = fs.createReadStream(file,{});
                         if (!err) {
                         botChan.joinVoiceChannel(channel).then(connection => {
                                 //connection.playFile(file)
