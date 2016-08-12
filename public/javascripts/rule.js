@@ -32,7 +32,7 @@ $(document).ready(function () {
             }
             if (btnValue === "edit") {
                 var formData = $(this).serializeArray();
-                var idRule = formData[0].value
+                var idRule = formData[0].value;
 
                 $.ajax({
                     url: '/rule/byid/' + idRule,
@@ -61,7 +61,7 @@ $(document).ready(function () {
             }
             if (btnValue === "delete") {
                 var formData = $(this).serializeArray();
-                var idRule = formData[0].value
+                var idRule = formData[0].value;
 
                 $.confirm({
                     text: "Are you sure you want to delete this rule?",
