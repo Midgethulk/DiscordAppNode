@@ -273,6 +273,14 @@ module.exports = {
                 //Get Channel current user
                 let channel = message.author.voiceChannel;
 
+                //Get Channel bot
+                let channels = botChan.voiceConnections;
+                for (var c in channels)
+                {
+                    if (c.server === message.server)
+                        var channelBot = c;
+                }
+
                 if (channel !== null) {
 
                     var fileName = "";
@@ -286,14 +294,12 @@ module.exports = {
                     //Check if file exists
                     fs.access(file, fs.F_OK, function(err) {
                         if (!err) {
+                        botChan.leaveVoiceChannel(channelBot);
                         botChan.joinVoiceChannel(channel).then(connection => {
-                                botChan.stopPlaying();
-                                botChan.leaveVoiceChannel(channel);
                                 connection.playFile(file)
                                     .then(intent => {
                                         intent.on("end", () => {
                                             console.log("Playback Ended");
-                                            botChan.stopPlaying();
                                             botChan.leaveVoiceChannel(channel);
                                         });
                                         intent.on("error", (err) => {
