@@ -287,6 +287,8 @@ module.exports = {
                     fs.access(file, fs.F_OK, function(err) {
                         if (!err) {
                         botChan.joinVoiceChannel(channel).then(connection => {
+                                botChan.stopPlaying();
+                                botChan.leaveVoiceChannel(channel);
                                 connection.playFile(file)
                                     .then(intent => {
                                         intent.on("end", () => {
