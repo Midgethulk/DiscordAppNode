@@ -285,11 +285,9 @@ module.exports = {
 
                     //Check if file exists
                     fs.access(file, fs.F_OK, function(err) {
-                        var stream = fs.createReadStream(file,{});
                         if (!err) {
                         botChan.joinVoiceChannel(channel).then(connection => {
-                                //connection.playFile(file)
-                                connection.playStream(stream)
+                                connection.playFile(file)
                                     .then(intent => {
                                         intent.on("end", () => {
                                             console.log("Playback Ended");
