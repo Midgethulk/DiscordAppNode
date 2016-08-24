@@ -312,7 +312,8 @@ module.exports = {
                                 console.log('Error joining voice channel: ' + err);
                             });
                         } else {
-                            output = "Unable to find sound file for '" + strArray[1] + "'\nPath: "+ file;
+                            output = "Unable to find sound file for '" + strArray[1] + "'";
+                            console.log("Path: "+ file);
                             botChan.reply(message, output);
                         }
                     });
