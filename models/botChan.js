@@ -292,7 +292,7 @@ module.exports = {
                                         .then(intent => {
                                             intent.on("end", () => {
                                                 console.log("Playback Ended");
-                                                botChan.leaveVoiceChannel(voiceChannel);
+                                                voiceChannel.leaveVoiceChannel(voiceChannel);
                                             });
                                             intent.on("error", (err) => {
                                                 console.log('Playback Error: ' + err);
