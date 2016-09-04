@@ -104,6 +104,7 @@ module.exports = {
         command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
+        /*
         botChan.on("disconnected", function () {
             //Check if DC or manual shutdown
             if(getOnlineStatus() === true)
@@ -112,6 +113,7 @@ module.exports = {
                 login()
             }
         });
+        */
 
         //Database commands
         Rule.find({}, function (err, rules) {
@@ -120,7 +122,7 @@ module.exports = {
             }
             else {
                 rules.forEach(function (rule) {
-                    command[rule.command] = rule.response
+                    command[rule.command] = rule.response;
                     commands.push(rule.command);
                 });
             }
@@ -464,8 +466,7 @@ function setRestartStatus(status) {
 
 function login () {
 
-    //botChan.login("jeroencornelis5@gmail.com", "dankmemer69", function (err, token) {
-    botChan.loginWithToken("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs", function (err, token) {
+    botChan.login("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs", function (err, token) {
         if (err){
             console.log("error logging in");
         }
