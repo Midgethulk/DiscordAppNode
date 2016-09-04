@@ -344,14 +344,16 @@ module.exports = {
                 //Check if file exists
                 fs.access(file, fs.F_OK, function(err) {
                     if (!err) {
+                        /*
                         var stream = fs.createReadStream(file);
                         stream.on('end', function () {
                             console.log('End of data reached.');
                         });
-                        textChannel.sendFile(stream);
+                        */
+                        textChannel.sendFile(file);
                     } else {
-                        output = "Unable to find image file for '" + strArray[1] + "'";
-                        textChannel.sendMessage(message);
+                        var output = "Unable to find image file for '" + strArray[1] + "'";
+                        textChannel.sendMessage(output);
                     }
                 });
             }
