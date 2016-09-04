@@ -289,12 +289,12 @@ module.exports = {
                         if (!err) {
                             voiceChannel.join().then(connection => {
                                     connection.playFile(file)
-                                        .then(intent => {
-                                            intent.on("end", () => {
+                                        .then(dispatcher  => {
+                                            dispatcher .on("end", () => {
                                                 console.log("Playback Ended");
                                                 connection.disconnect();
                                             });
-                                            intent.on("error", (err) => {
+                                            dispatcher .on("error", (err) => {
                                                 console.log('Playback Error: ' + err);
                                                 connection.disconnect();
                                             });
