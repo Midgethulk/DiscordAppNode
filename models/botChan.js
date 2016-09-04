@@ -52,12 +52,10 @@ module.exports = {
     },
     restart: function () {
         //TODO: FIX CODE ABLE TO START WHILE STARTED
-        /*
-         logout()
+         logout();
          if (getOnlineStatus() === false)
-         login();
+            login();
 
-         */
     },
     configure: function () {
         var prePath = "";
@@ -103,17 +101,6 @@ module.exports = {
         command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
         command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
         command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
-
-        /*
-         botChan.on("disconnected", function () {
-         //Check if DC or manual shutdown
-         if(getOnlineStatus() === true)
-         {
-         setOnlineStatus(false);
-         login()
-         }
-         });
-         */
 
         //Database commands
         Rule.find({}, function (err, rules) {
@@ -289,20 +276,22 @@ module.exports = {
                         if (!err) {
                             voiceChannel.join().then(connection => {
                                     connection.playFile(file)
-                                        .then(dispatcher  => {
-                                            dispatcher .on("end", () => {
+                                        .then(dispatcher => {
+                                            dispatcher.on("end", () => {
                                                 console.log("Playback Ended");
                                                 connection.disconnect();
                                             });
-                                            dispatcher .on("error", (err) => {
+                                            dispatcher.on("error", (err) => {
                                                 console.log('Playback Error: ' + err);
                                                 connection.disconnect();
                                             });
-                                        })
+                                        });
+                                    connection.disconnect();
                                 })
                                 .catch(err => {
                                     console.log('Error joining voice channel: ' + err);
                                 });
+
                         } else {
                             var output = "Unable to find sound file for '" + strArray[1] + "'";
                             console.log("Path: " + file);
