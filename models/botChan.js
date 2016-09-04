@@ -291,7 +291,7 @@ module.exports = {
                                 .catch(err => {
                                     console.log('Error joining voice channel: ' + err);
                                 });
-                            voiceChannel.leave();
+                            //voiceChannel.leave();
 
                         } else {
                             var output = "Unable to find sound file for '" + strArray[1] + "'";
