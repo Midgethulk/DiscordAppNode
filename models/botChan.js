@@ -131,25 +131,21 @@ module.exports = {
         //Process commands in command Array
         botChan.on("message", function (message) {
             if (message.content.toLocaleLowerCase() in command) {
-                botChan.sendMessage(message.channel, command[message.content.toLocaleLowerCase()]);
-                var obj = {};
-                obj.wait = 0;
-                botChan.deleteMessage(message, obj, function (err) {
-                    if (err)
-                        console.log(err);
-                });
+                var textChannel = message.channel;
+                textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
+
+                var messages = [message];
+                textChannel.deleteMessage(messages);
             }
         });
 
         botChan.on("messageUpdated", function (messageOld,messageNew) {
             if (messageNew.content.toLocaleLowerCase() in command) {
-                botChan.sendMessage(messageNew.channel, command[messageNew.content.toLocaleLowerCase()]);
-                var obj = {};
-                obj.wait = 0;
-                botChan.deleteMessage(messageNew, obj, function (err) {
-                    if (err)
-                        console.log(err);
-                });
+                var textChannel = message.channel;
+                textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
+
+                var messages = [messageNew];
+                textChannel.deleteMessage(messages);
             }
 
         });
@@ -157,14 +153,14 @@ module.exports = {
         //Process commands in command Array
         botChan.on("message", function (message) {
             var commandsString = "";
-
+            var textChannel = message.channel;
             if (message.content.toLocaleLowerCase() === (prefix +"commands")) {
 
                 for(var i = 0; i < commands.length; i++)
                 {
                     commandsString += commands[i] + "\n";
                 }
-                botChan.sendMessage(message.channel, commandsString);
+                textChannel.sendMessage(commandsString);
             }
 
             if (message.content.toLocaleLowerCase() === prefix+"commands audio") {
@@ -186,21 +182,23 @@ module.exports = {
                         var line = sprintf("%-"+stringLength+"s %s\n",cmd1,cmd2);
                         commandsString += line;
                     }
-                    botChan.sendMessage(message.channel, commandsString);
+                    textChannel.sendMessage(commandsString);
                 });
             }
         });
 
         //JOHN CENA! Can I speak to champ?
         botChan.on("message", function (message) {
+            var textChannel = message.channel;
             var msgLwr = message.content.toLocaleLowerCase();
             var srchStr = "john cena";
             if (msgLwr.indexOf(srchStr) > -1)
-                botChan.reply(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
+                textChannel.sendMessage(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
 
         });
 
         //TODO TEST
+        /*
         botChan.on("message", function (message) {
             if (message.content === "test") {
                 var output = "";
@@ -219,18 +217,20 @@ module.exports = {
                 //botChan.reply(message, output);
             }
         });
-
+        */
 
         //Radio Kappa random
         botChan.on("message", function (message) {
+            var textChannel = message.channel;
             if (message.content.toLocaleLowerCase() === "radiokapparandom") {
                 var random = getRandomIntInclusive(1, 12);
-                botChan.reply(message, command["radiokappa " + random.toString()]);
+                textChannel.sendMessage(command["radiokappa " + random.toString()]);
             }
         });
 
         //Join Channel
         botChan.on("message", function (message) {
+            var textChannel = message.channel;
             var messageContent = message.content;
             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
             var voiceChannelInput = messageContent.substr(messageContent.indexOf(' ') + 1);
@@ -249,14 +249,14 @@ module.exports = {
                     channelType = channel.type;
                     if (channelName.toLowerCase() === voiceChannelInput.toLowerCase() && channelType === "voice") {
                         //connection is the created Voice Connection.
-                        botChan.joinVoiceChannel(channel, function (err, connection) {
-                            if (err)
-                                output = "Error joining joining voice channel: " + channelName;
-                            else {
-                                output = "Joined voice channel: " + channelName;
-                                botChan.reply(message, output);
-                            }
-                        });
+                        channel.join()
+                            .then(
+                                connection => console.log('Connected!')
+                            )
+                            .catch(
+                                console.log,
+                                textChannel.sendMessage("Failed to join voice channel")
+                            );
                         break;
                     }
 
@@ -329,7 +329,7 @@ module.exports = {
         botChan.on("message", function (message) {
 
             var strArray = message.content.split(" ");
-            var channel = message.channel;
+            var textChannel = message.channel;
 
             if ((strArray[0] === "Kappa") || (strArray[0] === prefix + "img"))
             {
@@ -348,10 +348,10 @@ module.exports = {
                         stream.on('end', function () {
                             console.log('End of data reached.');
                         });
-                        botChan.sendFile(channel, stream, "");
+                        textChannel.sendFile(textChannel, stream, "");
                     } else {
                         output = "Unable to find image file for '" + strArray[1] + "'";
-                        botChan.reply(message, output);
+                        textChannel.sendMessage(message);
                     }
                 });
             }
