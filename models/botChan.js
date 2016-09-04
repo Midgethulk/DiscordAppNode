@@ -135,7 +135,7 @@ module.exports = {
                 textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
 
                 var messages = [message];
-                textChannel.deleteMessage(messages);
+                textChannel.bulkDelete(messages);
             }
         });
 
@@ -145,7 +145,7 @@ module.exports = {
                 textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
 
                 var messages = [messageNew];
-                textChannel.deleteMessage(messages);
+                textChannel.bulkDelete(messages);
             }
 
         });
