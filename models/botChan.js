@@ -116,29 +116,30 @@ module.exports = {
         });
 
         //Process commands in command Array
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             if (message.content.toLocaleLowerCase() in command) {
                 var textChannel = message.channel;
-                textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
+                var response = command[message.content.toLocaleLowerCase()][0];
+                textChannel.sendMessage(response);
 
                 var messages = [message];
                 textChannel.bulkDelete(messages);
             }
         });
 
-        botChan.on("messageUpdated", function (messageOld, messageNew) {
-            if (messageNew.content.toLocaleLowerCase() in command) {
+        botChan.on("messageUpdated", (oldMessage, newMessage) => {
+            if (newMessage.content.toLocaleLowerCase() in command) {
                 var textChannel = message.channel;
                 textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
 
-                var messages = [messageNew];
+                var messages = [newMessage];
                 textChannel.bulkDelete(messages);
             }
 
         });
 
-        //Process commands in command Array
-        botChan.on("message", function (message) {
+        //Process commands command
+        botChan.on("message", (message) => {
             var commandsString = "";
             var textChannel = message.channel;
             if (message.content.toLocaleLowerCase() === (prefix + "commands")) {
@@ -173,7 +174,7 @@ module.exports = {
         });
 
         //JOHN CENA! Can I speak to champ?
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             var textChannel = message.channel;
             var msgLwr = message.content.toLocaleLowerCase();
             var srchStr = "john cena";
@@ -205,7 +206,7 @@ module.exports = {
          */
 
         //Radio Kappa random
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             var textChannel = message.channel;
             if (message.content.toLocaleLowerCase() === "radiokapparandom") {
                 var random = getRandomIntInclusive(1, 12);
@@ -214,7 +215,7 @@ module.exports = {
         });
 
         //Join Channel
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             var textChannel = message.channel;
             var messageContent = message.content;
             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
@@ -250,7 +251,7 @@ module.exports = {
         });
 
         // Play Sound File
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             //if(msg.content.startsWith(prefix+"play")) {
             var textChannel = message.channel;
             var strArray = message.content.split(" ");
@@ -306,7 +307,7 @@ module.exports = {
         });
 
         //Send Images
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
 
             var strArray = message.content.split(" ");
             var textChannel = message.channel;
@@ -333,7 +334,7 @@ module.exports = {
         });
 
         //Twitch API
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             var textChannel = message.channel;
             var strArray = message.content.split(" ");
             if (strArray[0] == prefix + "twitch") {
@@ -371,7 +372,7 @@ module.exports = {
         });
 
         //OMDb API
-        botChan.on("message", function (message) {
+        botChan.on("message", (message) => {
             var textChannel = message.channel;
             var messageContent = message.content;
             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
