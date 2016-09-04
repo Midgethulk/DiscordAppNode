@@ -465,7 +465,8 @@ function setRestartStatus(status) {
 }
 
 function login () {
-
+    botChan.login("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs");
+    /*
     botChan.login("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs", function (err, token) {
         if (err){
             console.log("error logging in");
@@ -475,6 +476,7 @@ function login () {
             console.log("login successful\ntoken:" + token);
         }
     })
+    */
 }
 
 function logout() {
