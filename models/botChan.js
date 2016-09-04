@@ -292,11 +292,11 @@ module.exports = {
                                         .then(intent => {
                                             intent.on("end", () => {
                                                 console.log("Playback Ended");
-                                                voiceChannel.leaveVoiceChannel(voiceChannel);
+                                                connection.disconnect();
                                             });
                                             intent.on("error", (err) => {
                                                 console.log('Playback Error: ' + err);
-                                                voiceChannel.disconnect();
+                                                connection.disconnect();
                                             });
                                         })
                                 })
