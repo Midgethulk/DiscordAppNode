@@ -193,7 +193,7 @@ module.exports = {
             var msgLwr = message.content.toLocaleLowerCase();
             var srchStr = "john cena";
             if (msgLwr.indexOf(srchStr) > -1)
-                textChannel.sendMessage(message, "https://www.youtube.com/watch?v=5LitDGyxFh4");
+                textChannel.sendMessage("https://www.youtube.com/watch?v=5LitDGyxFh4");
 
         });
 
@@ -348,7 +348,7 @@ module.exports = {
                         stream.on('end', function () {
                             console.log('End of data reached.');
                         });
-                        textChannel.sendFile(textChannel, stream, "");
+                        textChannel.sendFile(stream);
                     } else {
                         output = "Unable to find image file for '" + strArray[1] + "'";
                         textChannel.sendMessage(message);
