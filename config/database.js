@@ -1,5 +1,5 @@
 module.exports = {
 
-    'url' : 'mongodb://185.53.131.163:27017/discord'
+    'url' : 'mongodb://site:ayylmao@ds033956.mlab.com:33956/discord'
 
 };
