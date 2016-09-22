@@ -263,7 +263,7 @@ module.exports = {
                 if (voiceChannel !== null) {
 
                     var fileName = "";
-                    if (strArray[1] === "")
+                    if (strArray[1] === "" || strArray[1] == undefined)
                         fileName = "nani.mp3";
                     else
                         fileName = strArray[1] + ".mp3";
@@ -293,8 +293,6 @@ module.exports = {
                             textChannel.sendMessage(output);
                         }
                     });
-
-
                 }
             }
         });
