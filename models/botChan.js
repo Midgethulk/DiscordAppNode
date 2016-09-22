@@ -52,8 +52,8 @@ module.exports = {
     },
     restart: function () {
         //TODO: FIX CODE ABLE TO START WHILE STARTED
-         logout();
-         if (getOnlineStatus() === false)
+        logout();
+        if (getOnlineStatus() === false)
             login();
 
     },
@@ -62,7 +62,7 @@ module.exports = {
         if (platform === "linux")
             prePath = "./";
         else
-            prePath = "./";
+            prePath = "../";
 
         //Hardcoded Commands
         botChan.setMaxListeners(20);
@@ -76,7 +76,7 @@ module.exports = {
         command["420 moe"] = "http://420.moe";
         command["typing game"] = "http://zty.pe/";
         command["dance"] = "http://i.imgur.com/CbDGwLv.gifv";
-        command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif"
+        command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif";
         command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
         command["pirate"] = "http://cristgaming.com/pirate.swf";
         command["hype train"] = "http://zone-archive.com/tmp/hype_train.html";
@@ -165,8 +165,7 @@ module.exports = {
                         if (files[i + 1] !== undefined)
                             var cmd2 = files[i + 1].replace(".mp3", "");
 
-                        var line = sprintf("%-" + stringLength + "s %s\n", cmd1, cmd2);
-                        commandsString += line;
+                        commandsString += sprintf("%-" + stringLength + "s %s\n", cmd1, cmd2);
                     }
                     textChannel.sendMessage(commandsString);
                 });
@@ -220,7 +219,6 @@ module.exports = {
             var messageContent = message.content;
             var strCmd = messageContent.substr(0, messageContent.indexOf(' '));
             var voiceChannelInput = messageContent.substr(messageContent.indexOf(' ') + 1);
-            var output = "";
 
             if (strCmd === prefix + "join") {
                 var channels = message.channel.server.channels;
@@ -276,24 +274,19 @@ module.exports = {
                     fs.access(file, fs.F_OK, function (err) {
                         if (!err) {
                             voiceChannel.join().then(connection => {
-                                    connection.playFile(file)
-                                        .then(dispatcher => {
-                                            dispatcher.on("end", () => {
-                                                console.log("Playback Ended");
-                                                connection.disconnect();
-                                            });
-                                            dispatcher.on("error", (err) => {
-                                                console.log('Playback Error: ' + err);
-                                                connection.disconnect();
-                                            });
-                                        });
+                                const dispatcher = connection.playFile = connection.playFile(file);
+                                dispatcher.on("end", () => {
+                                    console.log("Playback Ended");
                                     connection.disconnect();
-                                })
+                                });
+                                dispatcher.on("error", (err) => {
+                                    console.log('Playback Error: ' + err);
+                                    connection.disconnect();
+                                });
+                            })
                                 .catch(err => {
                                     console.log('Error joining voice channel: ' + err);
                                 });
-                            //voiceChannel.leave();
-
                         } else {
                             var output = "Unable to find sound file for '" + strArray[1] + "'";
                             console.log("Path: " + file);
