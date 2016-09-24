@@ -101,7 +101,6 @@ $(document).ready(function () {
     //Add Rule
     $('#btnAdd').on("click", function () {
         clearAlerts();
-        console.log("hello");
         $.ajax({
             type: "POST",
             url: "/rule/add",
@@ -117,6 +116,17 @@ $(document).ready(function () {
     $('#btnClear').on('click', function () {
         $('#formEdit').trigger("reset");
         clearAlerts();
+    });
+
+    //Clear Form
+    $('#btnReload').on('click', function () {
+        $.ajax({
+            type: "GET",
+            url: "/rule/reload",
+            success: function (data) {
+                updateAlerts(data);
+            }
+        });
     });
 
     function updateAlerts(data) {

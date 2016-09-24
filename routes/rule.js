@@ -177,6 +177,16 @@ module.exports = function (app, passport) {
         });
     });
 
+    //Reload Rules
+    app.get('/rule/reload', function (req, res, next) {
+
+        botChan.loadRules();
+        //botChan.configure();
+        res.jsonp({
+            message: "Reloaded the rules"
+        });
+    });
+
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
@@ -194,7 +204,7 @@ module.exports = function (app, passport) {
             else
                 res.send(401, 'Unauthorized');
         };
-    };
+    }
 
     function needsGroups(groups) {
         return function (req, res, next) {
@@ -209,5 +219,5 @@ module.exports = function (app, passport) {
             else
                 res.send(401, 'Unauthorized');
         };
-    };
+    }
 };

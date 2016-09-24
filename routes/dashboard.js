@@ -111,7 +111,7 @@ module.exports = function (app, passport) {
             else
                 res.send(401, 'Unauthorized');
         };
-    };
+    }
 
     function needsGroups(groups) {
         return function (req, res, next) {
@@ -126,5 +126,5 @@ module.exports = function (app, passport) {
             else
                 res.send(401, 'Unauthorized');
         };
-    };
+    }
 };

@@ -7,8 +7,10 @@ var opus = require('node-opus');
 var sprintf = require("sprintf-js").sprintf;
 var botChan;
 var onlineStatus = false;
-var restartStatus = false;
 var prefix = "!";
+
+var command = {};
+var commandStrings = [];
 
 
 var platform = os.platform();
@@ -34,12 +36,6 @@ module.exports = {
     getUptime: function () {
         return botChan.uptime;
     },
-    restartStatus: function () {
-        return restartStatus;
-    },
-    setRestartStatus: function (b) {
-        setRestartStatus(b);
-    },
     create: function () {
         botChan = new Discord.Client();
         //configure();
@@ -51,11 +47,15 @@ module.exports = {
         logout();
     },
     restart: function () {
+        /*
         //TODO: FIX CODE ABLE TO START WHILE STARTED
         logout();
         if (getOnlineStatus() === false)
             login();
-
+        */
+    },
+    loadRules: function () {
+        loadRules();
     },
     configure: function () {
         var prePath = "";
@@ -66,43 +66,11 @@ module.exports = {
 
         //Hardcoded Commands
         botChan.setMaxListeners(20);
-        var command = {};
-        var commands = [];
 
-        command["ping"] = "pong";
-        command["lenny"] = "( ͡° ͜ʖ ͡°)";
-        command["lenny face"] = "( ͡° ͜ʖ ͡°)";
-        command["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
-        command["420 moe"] = "http://420.moe";
-        command["typing game"] = "http://zty.pe/";
-        command["dance"] = "http://i.imgur.com/CbDGwLv.gifv";
-        command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif";
-        command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
-        command["pirate"] = "http://cristgaming.com/pirate.swf";
-        command["hype train"] = "http://zone-archive.com/tmp/hype_train.html";
-        command["❤ botchan"] = "http://i2.kym-cdn.com/photos/images/original/000/704/937/f38.jpg";
-
-
-        command["radiokappa"] =
-            "\nWrong Syntax, please use one of these commands instead:" +
-            "\nradioKappa 5" +
-            "\nradioKappaRandom" +
-            "\nradioKappaPlaylist";
-        command["radiokappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
-        command["radiokappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
-        command["radiokappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
-        command["radiokappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
-        command["radiokappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
-        command["radiokappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
-        command["radiokappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
-        command["radiokappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
-        command["radiokappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
-        command["radiokappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
-        command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
-        command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
-        command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
+        loadRules();
 
         //Database commands
+        /*
         Rule.find({}, function (err, rules) {
             if (err) {
                 console.log(err);
@@ -110,10 +78,12 @@ module.exports = {
             else {
                 rules.forEach(function (rule) {
                     command[rule.command] = rule.response;
-                    commands.push(rule.command);
+                    commandStrings.push(rule.command);
                 });
             }
         });
+        */
+        //ID: <@87484590209392640>
 
         //Process commands in command Array
         botChan.on("message", (message) => {
@@ -129,8 +99,9 @@ module.exports = {
 
         botChan.on("messageUpdated", (oldMessage, newMessage) => {
             if (newMessage.content.toLocaleLowerCase() in command) {
-                var textChannel = message.channel;
-                textChannel.sendMessage(command[message.content.toLocaleLowerCase()]);
+                var textChannel = newMessage.channel;
+                var response = command[newMessage.content.toLocaleLowerCase()][0];
+                textChannel.sendMessage(response);
 
                 var messages = [newMessage];
                 textChannel.bulkDelete(messages);
@@ -144,8 +115,8 @@ module.exports = {
             var textChannel = message.channel;
             if (message.content.toLocaleLowerCase() === (prefix + "commands")) {
 
-                for (var i = 0; i < commands.length; i++) {
-                    commandsString += commands[i] + "\n";
+                for (var i = 0; i < commandStrings.length; i++) {
+                    commandsString += commandStrings[i] + "\n";
                 }
                 textChannel.sendMessage(commandsString);
             }
@@ -423,16 +394,64 @@ module.exports = {
         });
     }
 };
+function loadRules() {
+    command = {};
+    commandStrings = [];
+
+    command["ping"] = "pong";
+    command["lenny"] = "( ͡° ͜ʖ ͡°)";
+    command["lenny face"] = "( ͡° ͜ʖ ͡°)";
+    command["pokemon"] = "https://www.youtube.com/watch?v=JuYeHPFR3f0";
+    command["420 moe"] = "http://420.moe";
+    command["typing game"] = "http://zty.pe/";
+    command["dance"] = "http://i.imgur.com/CbDGwLv.gifv";
+    command["!disgust"] = "http://i.imgur.com/Ih7NinU.gif";
+    command["facepalm"] = "https://i.imgur.com/iWKad22.jpg";
+    command["pirate"] = "http://cristgaming.com/pirate.swf";
+    command["hype train"] = "http://zone-archive.com/tmp/hype_train.html";
+    command["❤ botchan"] = "http://i2.kym-cdn.com/photos/images/original/000/704/937/f38.jpg";
+
+
+    command["radiokappa"] =
+        "\nWrong Syntax, please use one of these commands instead:" +
+        "\nradioKappa 5" +
+        "\nradioKappaRandom" +
+        "\nradioKappaPlaylist";
+    command["radiokappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
+    command["radiokappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
+    command["radiokappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
+    command["radiokappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
+    command["radiokappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
+    command["radiokappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
+    command["radiokappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
+    command["radiokappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
+    command["radiokappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
+    command["radiokappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
+    command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
+    command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
+    command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
+
+    //Database commands
+    Rule.find({}, function (err, rules) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            rules.forEach(function (rule) {
+                command[rule.command] = rule.response;
+                commandStrings.push(rule.command);
+            });
+        }
+    });
+
+    console.log("Reloaded rules");
+}
 function setOnlineStatus(status) {
     onlineStatus = status;
 }
 function getOnlineStatus() {
     return onlineStatus;
 }
-function setRestartStatus(status) {
-    onlineStatus = status;
-}
-
 function login() {
     botChan.login("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs");
     setOnlineStatus(true);
