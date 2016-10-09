@@ -69,27 +69,20 @@ module.exports = {
 
         loadRules();
 
-        //Database commands
-        /*
-        Rule.find({}, function (err, rules) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                rules.forEach(function (rule) {
-                    command[rule.command] = rule.response;
-                    commandStrings.push(rule.command);
-                });
-            }
-        });
-        */
         //ID: <@87484590209392640>
 
         //Process commands in command Array
         botChan.on("message", (message) => {
             if (message.content.toLocaleLowerCase() in command) {
                 var textChannel = message.channel;
-                var response = command[message.content.toLocaleLowerCase()][0];
+                var response = command[message.content.toLocaleLowerCase()];
+
+                //Check if array or String
+                if (response.isArray)
+                {
+                    response = command[message.content.toLocaleLowerCase()][0];
+                }
+
                 textChannel.sendMessage(response);
 
                 var messages = [message];
