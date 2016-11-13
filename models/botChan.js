@@ -69,25 +69,31 @@ module.exports = {
 
         loadRules();
 
-        //ID: <@87484590209392640>
+        //ID Kevin: <@87484590209392640>
 
         //Process commands in command Array
         botChan.on("message", (message) => {
-            if (message.content.toLocaleLowerCase() in command) {
-                var textChannel = message.channel;
-                var response = command[message.content.toLocaleLowerCase()];
+            var response = "";
+            var content = message.content;
+            var textChannel = message.channel;
+            var messages = "";
 
-                //Check if array or String
-                if (response.isArray)
-                {
-                    response = command[message.content.toLocaleLowerCase()][0];
-                }
+                if(content.toLocaleLowerCase() in command){
 
-                textChannel.sendMessage(response);
+                    response = command[content.toLocaleLowerCase()];
 
-                var messages = [message];
-                textChannel.bulkDelete(messages);
+                    //Check if array or String
+                    if (response.isArray)
+                    {
+                        response = command[content.toLocaleLowerCase()][0];
+                    }
+
+                    textChannel.sendMessage(response);
+                    messages = [message];
+                    textChannel.bulkDelete(messages);
             }
+
+
         });
 
         botChan.on("messageUpdated", (oldMessage, newMessage) => {
@@ -292,7 +298,8 @@ module.exports = {
         botChan.on("message", (message) => {
             var textChannel = message.channel;
             var strArray = message.content.split(" ");
-            if (strArray[0] == prefix + "twitch") {
+            var cmd = prefix + "twitch";
+            if (strArray[0] == cmd ) {
                 if (strArray[1] === "") {
                     textChannel.sendMessage("The " + prefix + "twitch command requires a channel name!\nExample: " + prefix + "twitch forsenlol");
                 }
@@ -365,7 +372,7 @@ module.exports = {
                                 var imdbUrl = json.imdbID;
                                 var tomatoMeter = json.tomatoMeter;
                                 var tomatoUserMeter = json.tomatoUserMeter;
-                                textChannel.sendMessage(message, "\nMovie Title: " + title
+                                textChannel.sendMessage("\nMovie Title: " + title
                                     + "\nReleased: " + released
                                     + "\nGenre: " + genre
                                     + "\nActors: " + actors
