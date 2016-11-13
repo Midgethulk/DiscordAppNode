@@ -361,7 +361,7 @@ module.exports = {
                             var response = json.Response;
 
                             if (response === "False") {
-                                textChannel.sendMessage(message, "\nMovie: " + inputTitle + " not found!");
+                                textChannel.sendMessage("\nMovie: " + inputTitle + " not found!");
                             }
 
                             if (response === "True") {
