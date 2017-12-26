@@ -16,6 +16,7 @@
     "express": "latest",
     "express-flash": "latest",
     "express-session": "latest",
+    "ffmpeg-binaries": "^3.2.2-3",
     "flash": "latest",
     "glob": "^7.0.5",
     "hbs": "latest",
