@@ -1,5 +1,5 @@
 {
-  "name": "DiscordAppNode",
+  "name": "discordappnode",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "cookie-parser": "latest",
     "debug": "latest",
     "discord.js": "latest",
+    "eslint": "^4.14.0",
     "express": "latest",
     "express-flash": "latest",
     "express-session": "latest",
