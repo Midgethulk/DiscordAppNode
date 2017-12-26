@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var opus = require('node-opus');
 var sprintf = require("sprintf-js").sprintf;
+var configBot = require('../config/botConfig.js');
 var botChan;
 var onlineStatus = false;
 var prefix = "!";
@@ -453,7 +454,7 @@ function getOnlineStatus() {
     return onlineStatus;
 }
 function login() {
-    botChan.login("MTkxNTEzNTUxMzg1Mzk1MjAw.CoN1WQ.UDv9zTt70Is7gebwogGXQqx2ULs");
+    botChan.login(configBot.token);
     setOnlineStatus(true);
 }
 
