@@ -66,7 +66,7 @@ module.exports = {
             prePath = "../";
 
         //Hardcoded Commands
-        botChan.setMaxListeners(20);
+        botChan.setMaxListeners(10);
 
         loadRules();
 
@@ -89,19 +89,23 @@ module.exports = {
                         response = command[content.toLocaleLowerCase()][0];
                     }
 
-                    textChannel.sendMessage(response);
-                    messages = [message];
-                    textChannel.bulkDelete(messages);
+                    textChannel.send(response)
+                    .catch(console.error);
+                    
+                    //Single Message delete
+                    //.then(message.delete().catch(console.error))
+
+                    //Bulk delete 
+                    //messages = [message];
+                    //textChannel.bulkDelete(messages);
             }
-
-
         });
 
         botChan.on("messageUpdated", (oldMessage, newMessage) => {
             if (newMessage.content.toLocaleLowerCase() in command) {
                 var textChannel = newMessage.channel;
                 var response = command[newMessage.content.toLocaleLowerCase()][0];
-                textChannel.sendMessage(response);
+                textChannel.send(response).catch(console.error);
 
                 var messages = [newMessage];
                 textChannel.bulkDelete(messages);
@@ -118,7 +122,7 @@ module.exports = {
                 for (var i = 0; i < commandStrings.length; i++) {
                     commandsString += commandStrings[i] + "\n";
                 }
-                textChannel.sendMessage(commandsString);
+                textChannel.send(commandsString).catch(console.error);
             }
 
             if (message.content.toLocaleLowerCase() === prefix + "commands audio") {
@@ -138,19 +142,9 @@ module.exports = {
 
                         commandsString += sprintf("%-" + stringLength + "s %s\n", cmd1, cmd2);
                     }
-                    textChannel.sendMessage(commandsString);
+                    textChannel.send(commandsString).catch(console.error);
                 });
             }
-        });
-
-        //JOHN CENA! Can I speak to champ?
-        botChan.on("message", (message) => {
-            var textChannel = message.channel;
-            var msgLwr = message.content.toLocaleLowerCase();
-            var srchStr = "john cena";
-            if (msgLwr.indexOf(srchStr) > -1)
-                textChannel.sendMessage("https://www.youtube.com/watch?v=5LitDGyxFh4");
-
         });
 
         //TODO TEST
@@ -169,20 +163,11 @@ module.exports = {
          if (member.status === "online")
          output += members[i] + "\n";
          }
-         botChan.sendMessage(message.channel, output);
+         botChan.send(message.channel, output);
          //botChan.reply(message, output);
          }
          });
          */
-
-        //Radio Kappa random
-        botChan.on("message", (message) => {
-            var textChannel = message.channel;
-            if (message.content.toLocaleLowerCase() === "radiokapparandom") {
-                var random = getRandomIntInclusive(1, 12);
-                textChannel.sendMessage(command["radiokappa " + random.toString()]);
-            }
-        });
 
         //Join Channel
         botChan.on("message", (message) => {
@@ -210,7 +195,7 @@ module.exports = {
                             )
                             .catch(
                                 console.log,
-                                textChannel.sendMessage("Failed to join voice channel")
+                                textChannel.send("Failed to join voice channel").catch(console.error)
                             );
                         break;
                     }
@@ -261,7 +246,7 @@ module.exports = {
                         } else {
                             var output = "Unable to find sound file for '" + strArray[1] + "'";
                             console.log("Path: " + file);
-                            textChannel.sendMessage(output);
+                            textChannel.send(output).catch(console.error);
                         }
                     });
                 }
@@ -286,23 +271,24 @@ module.exports = {
                 //Check if file exists
                 fs.access(file, fs.F_OK, function (err) {
                     if (!err) {
-                        textChannel.sendFile(file);
+                        textChannel.send(file).catch(console.error);
                     } else {
                         var output = "Unable to find image file for '" + strArray[1] + "'";
-                        textChannel.sendMessage(output);
+                        textChannel.send(output).catch(console.error);
                     }
                 });
             }
         });
 
         //Twitch API
+        /*
         botChan.on("message", (message) => {
             var textChannel = message.channel;
             var strArray = message.content.split(" ");
             var cmd = prefix + "twitch";
             if (strArray[0] == cmd ) {
                 if (strArray[1] === "") {
-                    textChannel.sendMessage("The " + prefix + "twitch command requires a channel name!\nExample: " + prefix + "twitch forsenlol");
+                    textChannel.send("The " + prefix + "twitch command requires a channel name!\nExample: " + prefix + "twitch forsenlol");
                 }
                 else {
                     request("https://api.twitch.tv/kraken/streams/" + strArray[1], function (error, response, body) {
@@ -312,7 +298,7 @@ module.exports = {
 
                             var jsonStreamData = json.stream;
                             if (jsonStreamData === null) {
-                                textChannel.sendMessage("\n" + strArray[1] + " is currently offline\nChannel: " + "http://www.twitch.tv/" + strArray[1]);
+                                textChannel.send("\n" + strArray[1] + " is currently offline\nChannel: " + "http://www.twitch.tv/" + strArray[1]);
                             }
                             else {
                                 var jsonChannelData = jsonStreamData.channel;
@@ -321,20 +307,22 @@ module.exports = {
                                 var title = jsonChannelData.status;
                                 var viewers = jsonStreamData.viewers;
                                 var url = jsonChannelData.url;
-                                textChannel.sendMessage("\nStatus: online\n" + "Name: " + name + "\nGame: " + game + "\nTitle: " + title + "\nViewers: " + viewers + "\nurl: " + url);
+                                textChannel.send("\nStatus: online\n" + "Name: " + name + "\nGame: " + game + "\nTitle: " + title + "\nViewers: " + viewers + "\nurl: " + url);
                             }
                         }
                         else {
                             if (response.statusCode == 404) {
-                                textChannel.sendMessage("Channel " + strArray[1] + " not found");
+                                textChannel.send("Channel " + strArray[1] + " not found");
                             }
                         }
                     });
                 }
             }
         });
+        */
 
         //OMDb API
+        /*
         botChan.on("message", (message) => {
             var textChannel = message.channel;
             var messageContent = message.content;
@@ -343,7 +331,7 @@ module.exports = {
 
             if ((strCmd == prefix + "movie") || (strCmd == prefix + "series")) {
                 if (inputTitle === "") {
-                    textChannel.sendMessage("The" + prefix + "movie command requires a move name!\nExample:" + prefix + "movie Star Wars");
+                    textChannel.send("The" + prefix + "movie command requires a move name!\nExample:" + prefix + "movie Star Wars");
                 }
                 else {
 
@@ -362,7 +350,7 @@ module.exports = {
                             var response = json.Response;
 
                             if (response === "False") {
-                                textChannel.sendMessage("\nMovie: " + inputTitle + " not found!");
+                                textChannel.send("\nMovie: " + inputTitle + " not found!");
                             }
 
                             if (response === "True") {
@@ -373,7 +361,7 @@ module.exports = {
                                 var imdbUrl = json.imdbID;
                                 var tomatoMeter = json.tomatoMeter;
                                 var tomatoUserMeter = json.tomatoUserMeter;
-                                textChannel.sendMessage("\nMovie Title: " + title
+                                textChannel.send("\nMovie Title: " + title
                                     + "\nReleased: " + released
                                     + "\nGenre: " + genre
                                     + "\nActors: " + actors
@@ -386,13 +374,14 @@ module.exports = {
                         }
                         else {
                             if (response.statusCode == 404) {
-                                textChannel.sendMessage("Error with request");
+                                textChannel.send("Error with request");
                             }
                         }
                     });
                 }
             }
         });
+        */
     }
 };
 function loadRules() {
@@ -411,26 +400,6 @@ function loadRules() {
     command["pirate"] = "http://cristgaming.com/pirate.swf";
     command["hype train"] = "http://zone-archive.com/tmp/hype_train.html";
     command["❤ botchan"] = "http://i2.kym-cdn.com/photos/images/original/000/704/937/f38.jpg";
-
-
-    command["radiokappa"] =
-        "\nWrong Syntax, please use one of these commands instead:" +
-        "\nradioKappa 5" +
-        "\nradioKappaRandom" +
-        "\nradioKappaPlaylist";
-    command["radiokappa 1"] = "https://www.youtube.com/watch?v=pNwqlLqHkuc";
-    command["radiokappa 2"] = "https://www.youtube.com/watch?v=w1txleejl90";
-    command["radiokappa 3"] = "https://www.youtube.com/watch?v=nvSjfSVWgVI";
-    command["radiokappa 4"] = "https://www.youtube.com/watch?v=e-w3oYVyl6Y";
-    command["radiokappa 5"] = "https://www.youtube.com/watch?v=bHzMLxVdPSo";
-    command["radiokappa 6"] = "https://www.youtube.com/watch?v=WAIOKZHIRBY";
-    command["radiokappa 7"] = "https://www.youtube.com/watch?v=ObCkFWdcb4k";
-    command["radiokappa 8"] = "https://www.youtube.com/watch?v=UWAxhQNDYLU";
-    command["radiokappa 9"] = "https://www.youtube.com/watch?v=4tCJKt2R4Do";
-    command["radiokappa 10"] = "https://www.youtube.com/watch?v=5yC00PvLqjA";
-    command["radiokappa 11"] = "https://www.youtube.com/watch?v=pBdWuGpc_gU";
-    command["radiokappa 12"] = "https://www.youtube.com/watch?v=UXw3-pmmYf8";
-    command["radiokappaplaylist"] = "https://www.youtube.com/playlist?list=PLkiIi_Of9LY5DAlCQQa4Ps3jpNbA9YFSb";
 
     //Database commands
     Rule.find({}, function (err, rules) {

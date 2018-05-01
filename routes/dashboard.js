@@ -34,44 +34,44 @@ module.exports = function (app, passport) {
         });
     });
 
-    app.get('/dashboard/bots/start', function (req, res, next) {
-        if (!botChan.onlineStatus()) {
-            botChan.create();
-            botChan.configure();
-            botChan.login();
+    //Start Bot
+    app.post('/dashboard/bots/action', function (req, res, next) {
+        var command = req.body.command;
+        var reply = req.body.replyRadios;
+        var response = req.body.response;
 
-            res.render('dashboard/bots.hbs', {
-                title: "Bot Management Panel",
-                message: "Started Bot-Chan!"
-            });
+        if (command == "start"){
+            if (!botChan.onlineStatus()) {
+                botChan.create();
+                botChan.configure();
+                botChan.login();
+    
+                res.jsonp({
+                    message: "Started botchan"
+                });;
+            }
+            else {
+                res.jsonp({
+                    error: "Bot-Chan already running!"
+                });
+            }
         }
-        else {
-            res.render('dashboard/bots.hbs', {
-                title: "Bot Management Panel",
-                message: "Bot-Chan already running!"
-            });
+
+        if (command == "stop"){
+            if (botChan.onlineStatus()) {
+                botChan.logout();
+                res.jsonp({
+                    message: "Stopped botchan"
+                });;
+            }
+            else {
+                res.jsonp({
+                    error: "Bot needs to be started first."
+                });
+            }
         }
     });
-
-    app.get('/dashboard/bots/stop', function (req, res, next) {
-        if (botChan.onlineStatus()) {
-            botChan.logout();
-        }
-        else {
-            res.render('dashboard/bots.hbs', {
-                error: "Bot needs to be started first."
-            });
-        }
-    });
-    app.get('/dashboard/bots/restart', function (req, res, next) {
-
-        botChan.restart();
-        res.render('dashboard/bots.hbs', {
-            message: "Restarted Bot-Chan"
-        });
-
-    });
-
+    /*
     app.get('/botchan/status', function (req, res, next) {
         if (botChan.onlineStatus()) {
             res.render('botchan/status.hbs', {
@@ -93,6 +93,7 @@ module.exports = function (app, passport) {
             });
         }
     });
+    */
 
     function isLoggedIn(req, res, next) {
 
