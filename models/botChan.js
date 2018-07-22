@@ -63,7 +63,7 @@ module.exports = {
         if (platform === "linux")
             prePath = "./";
         else
-            prePath = "../";
+            prePath = "./";
 
         //Hardcoded Commands
         botChan.setMaxListeners(10);
@@ -117,12 +117,16 @@ module.exports = {
         botChan.on("message", (message) => {
             var commandsString = "";
             var textChannel = message.channel;
+            var author = message.author;
             if (message.content.toLocaleLowerCase() === (prefix + "commands")) {
-
+                commandsString = "Bot-Chan chat commands: \n"
                 for (var i = 0; i < commandStrings.length; i++) {
                     commandsString += commandStrings[i] + "\n";
                 }
-                textChannel.send(commandsString).catch(console.error);
+                //textChannel.send(commandsString).catch(console.error);
+                author.send(commandsString)
+                    .then(console.log('Sent !command message to: ' + author.username))
+                    .catch(console.error);
             }
 
             if (message.content.toLocaleLowerCase() === prefix + "commands audio") {
@@ -130,19 +134,21 @@ module.exports = {
                 //TODO: MAKE IT PRETTY
                 //https://www.npmjs.com/package/sprintf-js
                 fs.readdir(audioPath, function (er, files) {
-                    for (var i = 0; i < files.length; i += 2) {
-                        var stringLength = 0;
-                        cmd1 = "";
-                        cmd2 = "";
-
-                        var cmd1 = files[i].replace(".mp3", "");
-                        stringLength = 20 - cmd1.trim().length;
-                        if (files[i + 1] !== undefined)
-                            var cmd2 = files[i + 1].replace(".mp3", "");
-
-                        commandsString += sprintf("%-" + stringLength + "s %s\n", cmd1, cmd2);
+                    if (files !== undefined)
+                    {
+                        commandsString = "Bot-Chan Audio commands: \n"
+                        var cmd1 = "";
+                        for (var i = 0; i < files.length; i += 1) {
+                            
+                            cmd1 = files[i].replace(".mp3", "").trim();
+                                                        
+                            commandsString += cmd1 + "\n";
+                        }
+                        //textChannel.send(commandsString).catch(console.error);
+                        author.send(commandsString)
+                            .then(console.log('Sent !command audio message to: ' + author.username))
+                            .catch(console.error);
                     }
-                    textChannel.send(commandsString).catch(console.error);
                 });
             }
         });
@@ -216,7 +222,7 @@ module.exports = {
                 let voiceChannel = message.member.voiceChannel;
 
 
-                if (voiceChannel !== null) {
+                if (voiceChannel !== undefined) {
 
                     var fileName = "";
                     if (strArray[1] === "" || strArray[1] == undefined)
