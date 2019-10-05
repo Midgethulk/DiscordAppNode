@@ -1,0 +1,34 @@
+{
+  "name": "bot-chan",
+  "version": "3.0.0",
+  "description": "Node.js application to manage Discord bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Midgethulk/Bot-Chan.git"
+  },
+  "author": "Jeroen Cornelis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Midgethulk/Bot-Chan/issues"
+  },
+  "homepage": "https://github.com/Midgethulk/Bot-Chan#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "latest",
+    "connect-flash": "latest",
+    "discord.js": "^11.3.2",
+    "eslint": "^4.19.1",
+    "ffmpeg-static": "latest",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "2.0.0-beta11",
+    "serve-favicon": "^2.5.0"
+  }
+}
