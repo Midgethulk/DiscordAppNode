@@ -2,4 +2,7 @@ node_modules/
 package-lock.json
 config/database.js
 config/botConfig.js
+services/botChanOld.js
 .vscode
+jobs
+services/test.js

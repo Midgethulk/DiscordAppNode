@@ -4,7 +4,8 @@
   "description": "Node.js application to manage Discord bot",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node bin/www"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11",
+    "node-opus": "latest",
     "serve-favicon": "^2.5.0"
   }
 }
