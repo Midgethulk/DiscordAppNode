@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node bin/www"
+    "start": "node bin/www"
   },
   "repository": {
     "type": "git",
@@ -21,16 +21,17 @@
     "bcrypt-nodejs": "latest",
     "body-parser": "latest",
     "connect-flash": "latest",
-    "discord.js": "^11.3.2",
-    "eslint": "^4.19.1",
-    "ffmpeg-static": "latest",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "discord.js": "^11.3.2",
+    "dotenv": "^8.1.0",
+    "eslint": "^4.19.1",
     "express": "~4.16.1",
+    "ffmpeg-static": "latest",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11",
     "node-opus": "latest",
+    "pug": "^2.0.4",
     "serve-favicon": "^2.5.0"
   }
 }

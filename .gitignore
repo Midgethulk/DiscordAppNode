@@ -6,3 +6,4 @@ services/botChanOld.js
 .vscode
 jobs
 services/test.js
+.env

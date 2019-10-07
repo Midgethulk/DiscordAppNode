@@ -1,5 +1,9 @@
 const Discord = require('discord.js');
-var configBot = require('../config/botConfig.js');
+const dotenv = require('dotenv');
+
+dotenv.config({path:'../.env'});
+
+// var configBot = require('../config/botConfig.js');
 
 const client = new Discord.Client();
 const prefix = "!";
@@ -17,7 +21,8 @@ class DiscordBot {
   }
 
   startBot(){
-    return client.login(configBot.token)
+    
+    return client.login(process.env.BOT_TOKEN)
       //.then(console.log)
       //.catch(console.error);
   }
